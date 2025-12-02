@@ -1,0 +1,1 @@
+rootProject.name = "ED.TP.GRP27"

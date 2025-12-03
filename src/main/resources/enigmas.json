@@ -1,0 +1,54 @@
+{
+  "enigmas": [
+    {
+      "pergunta": "Qual é a complexidade temporal média de pesquisa numa Árvore Binária de Pesquisa balanceada?",
+      "opcoes": [
+        "O(1)",
+        "O(n)",
+        "O(log n)",
+        "O(n^2)"
+      ],
+      "correta": 2
+    },
+    {
+      "pergunta": "Qual destas estruturas segue o princípio LIFO (Last In, First Out)?",
+      "opcoes": [
+        "Queue (Fila)",
+        "Stack (Pilha)",
+        "LinkedList (Lista Ligada)",
+        "Graph (Grafo)"
+      ],
+      "correta": 1
+    },
+    {
+      "pergunta": "Numa Lista Duplamente Ligada, cada nó tem referências para...",
+      "opcoes": [
+        "Apenas o próximo nó",
+        "O nó anterior e o próximo nó",
+        "Apenas o nó anterior",
+        "A raiz da lista"
+      ],
+      "correta": 1
+    },
+    {
+      "pergunta": "Qual destas NÃO é uma estrutura de dados linear?",
+      "opcoes": [
+        "Array",
+        "Queue",
+        "Stack",
+        "Binary Tree"
+      ],
+      "correta": 3
+    },
+    {
+      "pergunta": "Num Grafo, como se chamam as ligações entre os vértices?",
+      "opcoes": [
+        "Pontes",
+        "Nós",
+        "Arestas (Edges)",
+        "Folhas"
+      ],
+      "correta": 2
+    }
+  ]
+}

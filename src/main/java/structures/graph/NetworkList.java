@@ -263,6 +263,7 @@ public class NetworkList<T> implements NetworkADT<T> {
         adjList = largerAdjList;
     }
 
+
     // --- Stubs para interface ---
     public double shortestPathWeight(T vertex1, T vertex2) { return 0; }
     public boolean isEmpty() { return numVertices == 0; }
@@ -275,5 +276,30 @@ public class NetworkList<T> implements NetworkADT<T> {
             result += vertices[i].toString() + " -> " + adjList[i].toString() + "\n";
         }
         return result;
+    }
+
+    /**
+     * Retorna um iterador com os vértices adjacentes a um dado vértice.
+     * Este método é genérico e serve para qualquer aplicação do grafo.
+     *
+     * @param vertex O vértice do qual queremos os vizinhos.
+     * @return Iterador com os vizinhos.
+     */
+    public Iterator<T> getNeighbors(T vertex) {
+        int index = getIndex(vertex);
+        ArrayUnorderedList<T> neighbors = new ArrayUnorderedList<>();
+
+        if (!indexIsValid(index)) {
+            return neighbors.iterator();
+        }
+
+        // Como adjList é protected, podemos aceder aqui dentro
+        Iterator<WeightedEdge> it = adjList[index].iterator();
+        while (it.hasNext()) {
+            WeightedEdge edge = it.next();
+            neighbors.addToRear(vertices[edge.neighborIndex]);
+        }
+
+        return neighbors.iterator();
     }
 }

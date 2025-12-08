@@ -1,11 +1,11 @@
 package model;
 
-import io.MapLoader;
-import structures.queue.LinkedQueue;
-import exceptions.EmptyCollectionException;
-
 import java.util.Iterator;
 import java.util.Scanner;
+
+import exceptions.EmptyCollectionException;
+import io.MapLoader;
+import structures.queue.LinkedQueue;
 
 public class GameEngine {
     private Maze maze;
@@ -32,7 +32,7 @@ public class GameEngine {
         int numHumans = 0;
         if (scanner.hasNextInt()) {
             numHumans = scanner.nextInt();
-            scanner.nextLine(); // limpar buffer
+            scanner.nextLine();
         }
 
         for (int i = 1; i <= numHumans; i++) {
@@ -65,7 +65,7 @@ public class GameEngine {
         Room entrada = maze.getEntrance();
         if (entrada != null) {
             p.setCurrentRoom(entrada);
-            turnQueue.enqueue(p); // Adiciona o jogador à fila
+            turnQueue.enqueue(p);
             System.out.println(">> " + p.getName() + " entrou no jogo em: " + entrada.getId());
         } else {
             System.err.println("Erro: Não há entrada definida no mapa.");
@@ -89,7 +89,7 @@ public class GameEngine {
 
                 if (currentPlayer.getCurrentRoom() instanceof Center) {
                     System.out.println("\n🎉 VITORIA! " + currentPlayer.getName() + " encontrou o tesouro!");
-                    isRunning = false; // Jogo acaba
+                    isRunning = false;
                     break;
                 }
 

@@ -1,14 +1,15 @@
 package io;
 
-import model.Riddle;
-import structures.linear.ArrayUnorderedList;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
+import model.Riddle;
+import structures.linear.ArrayUnorderedList;
 
 public class RiddleLoader {
 

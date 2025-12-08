@@ -1,17 +1,43 @@
 package model;
 
+import java.util.Objects;
+
 /**
  * Classe abstrata que representa uma sala genérica no labirinto.
- * Define as propriedades básicas como ID e descrição.
+ * Todas as salas possuem um ID único e uma descrição.
+ * <p>
+ * O método {@code onEnter()} é chamado automaticamente quando um jogador entra na sala.
+ * O {@code equals()} e {@code hashCode()} são baseados no ID para permitir uso correto
+ * em estruturas como {@code MyHashMap} e grafos.
+ * </p>
+ *
+ * @author Grupo 47
+ * @version 2025/2026
  */
 public abstract class Room {
-    private String id;
-    private String description;
 
+    /** Identificador único da sala */
+    private final String id;
+
+    /** Descrição textual da sala */
+    private final String description;
+
+    /**
+     * Construtor da sala.
+     *
+     * @param id Identificador único da sala (ex: "E1", "R1")
+     * @param description Descrição visível ao jogador
+     */
     public Room(String id, String description) {
         this.id = id;
         this.description = description;
     }
+
+    /**
+     * Método chamado automaticamente quando um jogador entra na sala.
+     * Cada tipo de sala (Entrada, Enigma, Tesouro, etc.) define o seu comportamento.
+     */
+    public abstract void onEnter();
 
     public String getId() {
         return id;
@@ -21,29 +47,21 @@ public abstract class Room {
         return description;
     }
 
-    /**
-     * Método que define o comportamento quando um jogador entra na sala.
-     * Cada tipo de sala (Enigma, Tesouro, Normal) terá uma lógica diferente.
-     *
-     * @param player O jogador que entrou na sala (podes usar Object se ainda não tiveres Player)
-     */
-    // public abstract void onEnter(Player player);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Room)) return false;
+        Room room = (Room) o;
+        return Objects.equals(id, room.id);
+    }
 
-    public abstract void onEnter();
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
     @Override
     public String toString() {
         return "[" + id + ": " + description + "]";
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null) return false;
-        // Compara apenas por ID para facilitar as pesquisas no Grafo
-        if (obj instanceof Room) {
-            return this.id.equals(((Room) obj).id);
-        }
-        return false;
     }
 }

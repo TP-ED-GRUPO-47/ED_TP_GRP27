@@ -1,7 +1,8 @@
 package model;
 
-import structures.graph.NetworkList;
 import java.util.Iterator;
+
+import structures.graph.NetworkList;
 
 /**
  * Representa o labirinto (mapa) do jogo.
@@ -10,8 +11,8 @@ import java.util.Iterator;
  * os vértices são as salas (Room) e as arestas são os corredores.
  * </p>
  *
- * @author Miguel Pereira
- * @version 1.0
+ * @author Grupo 47
+ * @version 2025/2026
  */
 public class Maze {
 
@@ -40,17 +41,55 @@ public class Maze {
     }
 
     /**
-     * Cria um corredor entre duas salas com um determinado custo (peso).
+     * Cria um corredor entre duas salas, com custo e evento aleatório opcional.
      *
-     * @param fromId ID da sala de origem.
-     * @param toId   ID da sala de destino.
-     * @param cost   O custo/peso para atravessar o corredor (ex: distância ou dificuldade).
+     * @param fromId ID da sala de origem
+     * @param toId   ID da sala de destino
+     * @param cost   custo/peso do movimento
+     * @param event  evento aleatório que ocorre ao atravessar (pode ser null)
      */
-    public void addCorridor(String fromId, String toId, double cost) {
-        Room from = new RoomStandard(fromId, "");
-        Room to = new RoomStandard(toId, "");
+    public void addCorridor(String fromId, String toId, double cost, RandomEvent event) {
+        Room from = findRoomById(fromId);
+        Room to = findRoomById(toId);
 
-        this.map.addEdge(from, to, cost);
+        if (from == null || to == null) {
+            System.err.println(
+                    "ERRO: Não foi possível criar corredor " + fromId + " → " + toId + " (sala não encontrada)");
+            return;
+        }
+
+        Corridor corridor = new Corridor(from, to, cost, event);
+        map.addEdge(from, to, corridor);
+    }
+
+    /**
+     * Obtém o corredor entre duas salas específicas.
+     *
+     * @param from sala de origem
+     * @param to   sala de destino
+     * @return o objeto Corridor ou null se não existir ligação direta
+     */
+    public Corridor getCorridorBetween(Room from, Room to) {
+        return map.getCorridor(from, to);
+    }
+
+    /**
+     * Procura uma sala pelo seu ID.
+     *
+     * @param id identificador da sala
+     * @return a sala encontrada ou null
+     */
+    private Room findRoomById(String id) {
+        if (id == null) return null;
+
+        Iterator<Room> it = map.iteratorBFS();
+        while (it.hasNext()) {
+            Room room = it.next();
+            if (id.equals(room.getId())) {
+                return room;
+            }
+        }
+        return null;
     }
 
     /**
@@ -75,8 +114,6 @@ public class Maze {
         return map.getNeighbors(currentRoom);
     }
 
-    // ... (outros métodos) ...
-
     /**
      * Procura no labirinto a sala definida como Entrada.
      * Utiliza o iterador do grafo para percorrer todas as salas.
@@ -84,7 +121,8 @@ public class Maze {
      * @return A sala de entrada, ou null se não existir.
      */
     public Room getEntrance() {
-        if (map.isEmpty()) return null;
+        if (map.isEmpty())
+            return null;
 
         Iterator<Room> it = map.iteratorBFS(0);
 
@@ -101,12 +139,14 @@ public class Maze {
      * Devolve uma String bonita com as saídas para mostrar na consola.
      */
     public String getAvailableExits(Room currentRoom) {
-        if (currentRoom == null) return "Nenhuma";
+        if (currentRoom == null)
+            return "Nenhuma";
 
         Iterator<Room> it = getNeighbors(currentRoom);
         StringBuilder sb = new StringBuilder();
 
-        if (!it.hasNext()) return "Sem saídas (Beco sem saída)";
+        if (!it.hasNext())
+            return "Sem saídas (Beco sem saída)";
 
         while (it.hasNext()) {
             Room neighbor = it.next();

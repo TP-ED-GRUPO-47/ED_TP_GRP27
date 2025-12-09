@@ -1,0 +1,14 @@
+{
+  "enigmas": [
+    {
+      "pergunta": "Quanto é 1+1?",
+      "opcoes": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "correta": 1
+    }
+  ]
+}

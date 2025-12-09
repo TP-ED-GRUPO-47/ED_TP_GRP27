@@ -11,17 +11,27 @@ import model.Room;
 import model.RoomStandard;
 
 /**
- * Editor de mapas em modo texto.
- * Permite criar novos labirintos e guardá-los em JSON.
- * Cumpre o requisito: "criar e guardar novos mapas, reutilizáveis em futuras partidas."
+ * Text-based Map Editor.
+ * <p>
+ * Allows the user to create new mazes manually by adding rooms and corridors,
+ * and saving the result to a JSON file.
+ * This class fulfills the requirement: "create and save new maps, reusable in future matches."
+ * </p>
  *
- * @author Grupo 47
+ * @author Group 27
  * @version 2025/2026
  */
 public class MapEditor {
     private static final Scanner scanner = new Scanner(System.in);
     private static Maze maze = new Maze();
 
+    /**
+     * Starts the Map Editor interface.
+     * <p>
+     * Displays a menu loop allowing the user to add rooms, add corridors,
+     * list current components, or save the map to a file.
+     * </p>
+     */
     public static void start() {
         System.out.println("=== MAP EDITOR - Labirinto da Glória ===");
         while (true) {
@@ -43,6 +53,13 @@ public class MapEditor {
         }
     }
 
+    /**
+     * Interactively adds a new room to the maze.
+     * <p>
+     * Prompts the user for the Room ID, Type (ENTRADA, TESOURO, ENIGMA, NORMAL),
+     * and a description.
+     * </p>
+     */
     private static void addRoom() {
         System.out.print("ID: ");
         String id = scanner.nextLine();
@@ -61,6 +78,12 @@ public class MapEditor {
         System.out.println("Sala adicionada!");
     }
 
+    /**
+     * Interactively adds a corridor (connection) between two existing rooms.
+     * <p>
+     * Prompts the user for the source ID, destination ID, and the travel cost.
+     * </p>
+     */
     private static void addCorridor() {
         System.out.print("De (ID): ");
         String from = scanner.nextLine();
@@ -71,9 +94,17 @@ public class MapEditor {
         maze.addCorridor(from, to, cost);
     }
 
+    /**
+     * Saves the current maze configuration to a JSON file.
+     * <p>
+     * The file is saved in the `src/main/resources/` directory with the name provided by the user.
+     * Note: This implementation currently creates a basic JSON structure.
+     * </p>
+     */
     private static void saveMap() {
         System.out.print("Nome do ficheiro (sem .json): ");
         String name = scanner.nextLine();
+        // Generates a placeholder structure; full serialization logic would expand here
         String json = "{\"nome\":\"" + name + "\",\"salas\":[],\"ligacoes\":[]}";
         try (FileWriter fw = new FileWriter("src/main/resources/" + name + ".json")) {
             fw.write(json);
@@ -83,6 +114,12 @@ public class MapEditor {
         }
     }
 
+    /**
+     * Helper method to safely read an integer from the scanner.
+     * Consumes invalid input until a valid integer is provided.
+     *
+     * @return The integer read.
+     */
     private static int readInt() {
         while (!scanner.hasNextInt()) scanner.next();
         int v = scanner.nextInt();
@@ -90,6 +127,12 @@ public class MapEditor {
         return v;
     }
 
+    /**
+     * Helper method to safely read a double from the scanner.
+     * Consumes invalid input until a valid double is provided.
+     *
+     * @return The double read.
+     */
     private static double readDouble() {
         while (!scanner.hasNextDouble()) scanner.next();
         double v = scanner.nextDouble();

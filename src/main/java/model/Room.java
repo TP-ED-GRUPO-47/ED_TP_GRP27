@@ -3,30 +3,30 @@ package model;
 import java.util.Objects;
 
 /**
- * Classe abstrata que representa uma sala genérica no labirinto.
- * Todas as salas possuem um ID único e uma descrição.
+ * Abstract class representing a generic room in the maze.
  * <p>
- * O método {@code onEnter()} é chamado automaticamente quando um jogador entra na sala.
- * O {@code equals()} e {@code hashCode()} são baseados no ID para permitir uso correto
- * em estruturas como {@code MyHashMap} e grafos.
+ * All rooms possess a unique ID and a description.
+ * The {@code onEnter()} method is automatically called when a player enters the room.
+ * {@code equals()} and {@code hashCode()} are based on the ID to ensure correct behavior
+ * in data structures such as graphs or maps.
  * </p>
  *
- * @author Grupo 47
+ * @author Group 27
  * @version 2025/2026
  */
 public abstract class Room {
 
-    /** Identificador único da sala */
+    /** Unique identifier for the room */
     private final String id;
 
-    /** Descrição textual da sala */
+    /** Textual description of the room */
     private final String description;
 
     /**
-     * Construtor da sala.
+     * Constructs a new Room.
      *
-     * @param id Identificador único da sala (ex: "E1", "R1")
-     * @param description Descrição visível ao jogador
+     * @param id          Unique identifier for the room (e.g., "E1", "R1").
+     * @param description Description visible to the player.
      */
     public Room(String id, String description) {
         this.id = id;
@@ -34,19 +34,35 @@ public abstract class Room {
     }
 
     /**
-     * Método chamado automaticamente quando um jogador entra na sala.
-     * Cada tipo de sala (Entrada, Enigma, Tesouro, etc.) define o seu comportamento.
+     * Abstract method called automatically when a player enters the room.
+     * Each specific room type (Entrance, Riddle, Treasure, etc.) must define its own behavior.
      */
     public abstract void onEnter();
 
+    /**
+     * Retrieves the unique identifier of the room.
+     *
+     * @return The room ID.
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Retrieves the description of the room.
+     *
+     * @return The text description.
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Checks if this room is equal to another object based on the ID.
+     *
+     * @param o The object to compare.
+     * @return true if the IDs match, false otherwise.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -55,11 +71,21 @@ public abstract class Room {
         return Objects.equals(id, room.id);
     }
 
+    /**
+     * Generates a hash code for the room based on its ID.
+     *
+     * @return The hash code.
+     */
     @Override
     public int hashCode() {
         return Objects.hash(id);
     }
 
+    /**
+     * Returns a string representation of the room.
+     *
+     * @return A string in the format "[ID: Description]".
+     */
     @Override
     public String toString() {
         return "[" + id + ": " + description + "]";

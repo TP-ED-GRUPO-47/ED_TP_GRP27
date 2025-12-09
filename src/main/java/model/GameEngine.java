@@ -5,26 +5,46 @@ import java.util.Scanner;
 
 import exceptions.EmptyCollectionException;
 import io.MapLoader;
+import io.ReportExporter; // Required for the final JSON report
 import structures.queue.LinkedQueue;
 
+/**
+ * Core engine of the "Labirinto da Glória" game.
+ * <p>
+ * This class manages the game loop, player turns (queue-based),
+ * movement logic, event handling (traps, items), and victory conditions.
+ * It supports both Human and Bot players in a multiplayer environment.
+ * </p>
+ *
+ * @author Group 27
+ * @version 2025/2026
+ */
 public class GameEngine {
     private Maze maze;
     private LinkedQueue<Player> turnQueue;
     private boolean isRunning;
     private Scanner scanner;
 
+    /**
+     * Initializes the Game Engine with an empty queue and scanner.
+     */
     public GameEngine() {
         this.scanner = new Scanner(System.in);
         this.turnQueue = new LinkedQueue<>();
         this.isRunning = false;
     }
 
+    /**
+     * Sets up the game by loading the map and registering players.
+     *
+     * @param mapFile The filename of the JSON map to load.
+     */
     public void initGame(String mapFile) {
         System.out.println(">>> A carregar o Labirinto...");
         this.maze = MapLoader.loadMaze(mapFile);
 
         if (this.maze == null || this.maze.toString().isEmpty()) {
-            System.err.println("CRÍTICO: Erro ao carregar mapa.");
+            System.err.println("CRÍTICO: Erro ao carregar o mapa.");
             return;
         }
 
@@ -61,6 +81,10 @@ public class GameEngine {
         this.isRunning = true;
     }
 
+    /**
+     * Helper to place a player at the entrance and add them to the turn queue.
+     * @param p The player to add.
+     */
     private void addPlayerToGame(Player p) {
         Room entrada = maze.getEntrance();
         if (entrada != null) {
@@ -72,6 +96,10 @@ public class GameEngine {
         }
     }
 
+    /**
+     * Starts the main game loop.
+     * Manages turns, checks for victory, and handles turn skipping effects.
+     */
     public void start() {
         System.out.println("\n=== O JOGO COMEÇOU! ===");
 
@@ -81,6 +109,13 @@ public class GameEngine {
 
                 System.out.println("\n>>> Turno de: " + currentPlayer.getName() + " <<<");
 
+                if (currentPlayer.skipsTurn()) {
+                    System.out.println("⛔ " + currentPlayer.getName() + " perdeu a vez devido a um efeito anterior!");
+                    currentPlayer.setSkipNextTurn(false);
+                    turnQueue.enqueue(currentPlayer);
+                    continue;
+                }
+
                 if (currentPlayer instanceof Bot) {
                     playBotTurn((Bot) currentPlayer);
                 } else {
@@ -88,7 +123,9 @@ public class GameEngine {
                 }
 
                 if (currentPlayer.getCurrentRoom() instanceof Center) {
-                    System.out.println("\n🎉 VITORIA! " + currentPlayer.getName() + " encontrou o tesouro!");
+                    System.out.println("\n🎉 VITÓRIA! " + currentPlayer.getName() + " encontrou o tesouro!");
+                    System.out.println("A gerar relatório final...");
+                    ReportExporter.exportMissionReport(currentPlayer);
                     isRunning = false;
                     break;
                 }
@@ -107,8 +144,27 @@ public class GameEngine {
         System.out.println("Jogo terminado.");
     }
 
+    /**
+     * Handles the interaction logic for a human player.
+     */
     private void playHumanTurn(Player player) {
+        Room current = player.getCurrentRoom();
         printStatus(player);
+
+        // Interaction with Lever Room
+        if (current instanceof LeverRoom) {
+            LeverRoom leverRoom = (LeverRoom) current;
+            if (!leverRoom.isActivated()) {
+                System.out.println("Queres puxar a alavanca? (sim/nao)");
+                System.out.print("> ");
+                if (scanner.hasNextLine()) {
+                    String resp = scanner.nextLine().toLowerCase();
+                    if (resp.equals("sim") || resp.equals("s")) {
+                        handleLever(player, leverRoom);
+                    }
+                }
+            }
+        }
 
         System.out.println("O que queres fazer? (move <ID> | look | exit)");
         System.out.print("> ");
@@ -119,6 +175,9 @@ public class GameEngine {
         }
     }
 
+    /**
+     * Handles the automated logic for a bot player.
+     */
     private void playBotTurn(Bot bot) {
         String targetId = bot.decideMove(maze);
 
@@ -130,6 +189,9 @@ public class GameEngine {
         }
     }
 
+    /**
+     * Processes text commands from the user.
+     */
     private void processCommand(Player player, String input) {
         String[] parts = input.split(" ");
         String command = parts[0].toLowerCase();
@@ -154,6 +216,12 @@ public class GameEngine {
         }
     }
 
+    /**
+     * Moves a player (Human or Bot) to a target room ID, checking validity and events.
+     *
+     * @param p        The player moving.
+     * @param targetId The ID of the destination room.
+     */
     private void movePlayer(Player p, String targetId) {
         Room current = p.getCurrentRoom();
 
@@ -171,20 +239,64 @@ public class GameEngine {
         }
 
         if (found) {
+            Corridor corridor = maze.getCorridorBetween(current, targetRoom);
+            if (corridor != null) {
+                RandomEvent event = corridor.getEvent();
+                if (event != null) {
+                    System.out.println("\n ALERTA DE EVENTO NO CORREDOR!");
+                    corridor.triggerEvent();
+                    applyEffect(p, event);
+                }
+            }
+
             p.setCurrentRoom(targetRoom);
             System.out.println(">> " + p.getName() + " entrou em: " + targetRoom.getId());
 
             if (targetRoom instanceof RiddleRoom && !(p instanceof Bot)) {
                 handleRiddle((RiddleRoom) targetRoom);
             }
+
         } else {
-            System.out.println("(!) Movimento inválido: " + targetId);
+            System.out.println("(!) Movimento inválido: Caminho para " + targetId + " inexistente.");
         }
     }
 
+    /**
+     * Applies the logic of a Random Event Effect to a player.
+     */
+    private void applyEffect(Player p, RandomEvent event) {
+        if (event == null) return;
+
+        Effect effect = event.getDirectEffect();
+        if (effect != null) {
+            switch (effect) {
+                case DAMAGE:
+                case TRAP:
+                    p.updatePower(-Math.abs(effect.getValue()));
+                    break;
+                case HEAL:
+                case BONUS_POWER:
+                    p.updatePower(Math.abs(effect.getValue()));
+                    break;
+                case SKIP_TURN:
+                    System.out.println("⏳ " + p.getName() + " ficou atordoado e perderá a próxima jogada!");
+                    p.setSkipNextTurn(true);
+                    break;
+                case SWAP_POSITION:
+                    performSwap(p);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Handles the logic for Riddle Rooms (Display question, check answer).
+     */
     private void handleRiddle(RiddleRoom room) {
         if (room.isSolved()) {
-            System.out.println("Este enigma já foi resolvido anteriormente.");
+            System.out.println("Este enigma já foi resolvido.");
             return;
         }
 
@@ -201,24 +313,77 @@ public class GameEngine {
             i++;
         }
 
-        System.out.print("Resposta: ");
+        System.out.print("Resposta (número): ");
         if (scanner.hasNextInt()) {
             int choice = scanner.nextInt();
             scanner.nextLine();
 
             if (r.checkAnswer(choice - 1)) {
-                System.out.println("✅ Correto! Podes continuar.");
+                System.out.println("Correto! Podes continuar.");
                 room.setSolved(true);
             } else {
-                System.out.println("❌ Errado! Perdeste tempo.");
+                System.out.println("Errado! Perdeste tempo.");
             }
+        }
+    }
+
+    /**
+     * Handles the interaction with a Lever Room (Open secret path, Trap, or Nothing).
+     */
+    private void handleLever(Player p, LeverRoom room) {
+        LeverRoom.LeverResult result = room.pullLever();
+
+        switch (result) {
+            case UNLOCK_PATH:
+                System.out.println("CRACK! Ouves uma parede a mover-se...");
+                String targetId = maze.createSecretPassage(p.getCurrentRoom());
+                if (targetId != null) {
+                    System.out.println("Uma passagem secreta abriu-se para: " + targetId + "!");
+                } else {
+                    System.out.println("O mecanismo parece encravado.");
+                }
+                break;
+            case TRAP:
+                System.out.println("CLANG! Uma armadilha disparou!");
+                p.updatePower(-20);
+                break;
+            case NOTHING:
+                System.out.println("Apenas um clique seco. Nada aconteceu.");
+                break;
+        }
+    }
+
+    /**
+     * Swaps the active player's position with the next player in the queue.
+     */
+    private void performSwap(Player activePlayer) {
+        if (turnQueue.isEmpty()) {
+            System.out.println("Não há mais ninguém com quem trocar!");
+            return;
+        }
+
+        try {
+            Player target = turnQueue.first();
+
+            Room myRoom = activePlayer.getCurrentRoom();
+            Room targetRoom = target.getCurrentRoom();
+
+            activePlayer.setCurrentRoom(targetRoom);
+            target.setCurrentRoom(myRoom);
+
+            System.out.println("TROCA! " + activePlayer.getName() + " trocou de lugar com " + target.getName());
+            System.out.println(activePlayer.getName() + " está agora em: " + targetRoom.getId());
+
+        } catch (Exception e) {
+            System.out.println("Erro ao trocar posições.");
         }
     }
 
     private void printStatus(Player p) {
         Room current = p.getCurrentRoom();
         System.out.println("\n--- Estado de " + p.getName() + " ---");
-        System.out.println("Local: " + current.getId() + " (" + current.getDescription() + ")");
+        System.out.println("Localização: " + current.getId() + " (" + current.getDescription() + ")");
+        System.out.println("Poder: " + p.getPower());
         System.out.println("Saídas: [" + maze.getAvailableExits(current) + "]");
     }
 }

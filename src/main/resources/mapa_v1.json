@@ -1,36 +1,76 @@
 {
-  "nome": "O Caminho do Sábio",
+  "nome": "O Labirinto Final",
   "salas": [
     {
       "id": "E1",
       "tipo": "ENTRADA",
-      "descricao": "Uma caverna húmida. Vês luz ao fundo do túnel."
+      "descricao": "O Hall de Entrada. Sentes um arrepio na espinha."
     },
     {
-      "id": "S1",
+      "id": "Corredor1",
       "tipo": "NORMAL",
-      "descricao": "Uma bifurcação. À esquerda ouves água, à direita vês uma porta dourada."
+      "descricao": "Um corredor longo e húmido."
     },
     {
-      "id": "R1",
+      "id": "SalaAlavanca",
+      "tipo": "ALAVANCA",
+      "descricao": "Uma sala mecânica com engrenagens e uma alavanca na parede."
+    },
+    {
+      "id": "SalaEnigma",
       "tipo": "ENIGMA",
-      "descricao": "Uma sala misteriosa com inscrições antigas na parede. Um guardião barra a passagem!"
+      "descricao": "Um guardião bloqueia a passagem para o tesouro."
     },
     {
-      "id": "C1",
+      "id": "SalaTesouro",
       "tipo": "TESOURO",
-      "descricao": "A Câmara dos Segredos! O tesouro é teu."
+      "descricao": "A Sala do Trono Dourado! Venceste!"
     },
     {
-      "id": "Beco",
+      "id": "SalaPerigosa",
       "tipo": "NORMAL",
-      "descricao": "Um beco sem saída com um esqueleto no chão."
+      "descricao": "O chão está coberto de ossos..."
     }
   ],
   "ligacoes": [
-    { "origem": "E1", "destino": "S1", "custo": 1.0 },
-    { "origem": "S1", "destino": "Beco", "custo": 2.0 },
-    { "origem": "S1", "destino": "R1", "custo": 3.0 },
-    { "origem": "R1", "destino": "C1", "custo": 10.0 }
+    {
+      "origem": "E1",
+      "destino": "Corredor1",
+      "custo": 1.0
+    },
+    {
+      "origem": "Corredor1",
+      "destino": "SalaAlavanca",
+      "custo": 2.0,
+      "evento": {
+        "descricao": "Encontraste uma Poção de Vida!",
+        "item": "PocaoVida",
+        "efeito": "HEAL"
+      }
+    },
+    {
+      "origem": "Corredor1",
+      "destino": "SalaPerigosa",
+      "custo": 1.0
+    },
+    {
+      "origem": "SalaPerigosa",
+      "destino": "SalaEnigma",
+      "custo": 5.0,
+      "evento": {
+        "descricao": "ARMADILHA! O chão cedeu e caíste.",
+        "efeito": "TRAP"
+      }
+    },
+    {
+      "origem": "SalaAlavanca",
+      "destino": "SalaEnigma",
+      "custo": 2.0
+    },
+    {
+      "origem": "SalaEnigma",
+      "destino": "SalaTesouro",
+      "custo": 10.0
+    }
   ]
 }

@@ -7,11 +7,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Logger central do jogo.
- * Regista todos os eventos importantes num ficheiro de log com timestamp.
- * Usado para depuração, relatório final e avaliação.
+ * Central game logger.
+ * Records all important events in a log file with timestamps.
+ * Used for debugging, final reporting, and evaluation.
  *
- * @author Grupo 47
+ * @author Grupo 27
  * @version 2025/2026
  */
 public class GameLogger {
@@ -22,10 +22,11 @@ public class GameLogger {
 
     static {
         try {
-            writer = new PrintWriter(new FileWriter(LOG_FILE, false)); // false = sobrescreve
+            writer = new PrintWriter(new FileWriter(LOG_FILE, false)); // false = overwrite
             log("=== LABIRINTO DA GLÓRIA - INÍCIO DA SESSÃO ===");
             log("Data/Hora: " + LocalDateTime.now().format(dtf));
-            log("Grupo 47 - Estruturas de Dados 2025/2026");
+            // CORREÇÃO: Alterado de Grupo 47 para Grupo 27
+            log("Grupo 27 - Estruturas de Dados 2025/2026");
             log("---------------------------------------------------");
         } catch (IOException e) {
             System.err.println("ERRO CRÍTICO: Não foi possível criar o ficheiro de log!");
@@ -33,9 +34,9 @@ public class GameLogger {
     }
 
     /**
-     * Regista uma mensagem no ficheiro de log com timestamp.
+     * Logs a message to the log file with a timestamp.
      *
-     * @param message Mensagem a registar
+     * @param message The message to be logged.
      */
     public static void log(String message) {
         String timestamp = LocalDateTime.now().format(dtf);
@@ -46,10 +47,10 @@ public class GameLogger {
     }
 
     /**
-     * Regista uma vitória com detalhes.
+     * Logs a victory event with details.
      *
-     * @param winner Nome do vencedor
-     * @param moves  Número de movimentos
+     * @param winner The name of the winner.
+     * @param moves  The number of moves taken.
      */
     public static void logVictory(String winner, int moves) {
         log("VITÓRIA! Jogador '" + winner + "' encontrou o tesouro em " + moves + " movimentos!");
@@ -58,7 +59,8 @@ public class GameLogger {
     }
 
     /**
-     * Fecha o logger (chamar no fim do programa).
+     * Closes the logger resource.
+     * This method should be called at the end of the program to ensure all data is written.
      */
     public static void close() {
         if (writer != null) {

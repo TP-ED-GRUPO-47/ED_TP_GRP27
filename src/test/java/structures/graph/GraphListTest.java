@@ -5,13 +5,13 @@ import org.junit.jupiter.api.Test;
 import java.util.Iterator;
 import static org.junit.jupiter.api.Assertions.*;
 
-class GraphMatrixTest {
+class GraphListTest {
 
-    private Graph<String> graph;
+    private GraphList<String> graph;
 
     @BeforeEach
     void setUp() {
-        graph = new Graph<>();
+        graph = new GraphList<>();
     }
 
     @Test
@@ -34,7 +34,6 @@ class GraphMatrixTest {
 
         assertEquals(15, graph.size());
 
-
         graph.addEdge("V0", "V14");
 
         Iterator<String> it = graph.iteratorBFS("V0");
@@ -42,11 +41,12 @@ class GraphMatrixTest {
         while(it.hasNext()) {
             if (it.next().equals("V14")) foundV14 = true;
         }
-        assertTrue(foundV14, "V14 deve ser alcançável a partir de V0 após expansão da matriz");
+        assertTrue(foundV14, "V14 deve ser alcançável a partir de V0 após expansão");
     }
 
     @Test
     void testAddEdgeAndBFS() {
+        // Grafo: A -- B -- C
         graph.addVertex("A");
         graph.addVertex("B");
         graph.addVertex("C");
@@ -80,14 +80,35 @@ class GraphMatrixTest {
     }
 
     @Test
-    void testShortestPath() {
-
+    void testDFSBranching() {
         graph.addVertex("A");
         graph.addVertex("B");
         graph.addVertex("C");
 
         graph.addEdge("A", "B");
+        graph.addEdge("A", "C");
+
+        Iterator<String> dfs = graph.iteratorDFS("A");
+        assertEquals("A", dfs.next());
+
+        String second = dfs.next();
+        String third = dfs.next();
+
+        assertTrue(second.equals("B") || second.equals("C"));
+        assertTrue(third.equals("B") || third.equals("C"));
+    }
+
+    @Test
+    void testShortestPath() {
+
+        graph.addVertex("A");
+        graph.addVertex("B");
+        graph.addVertex("C");
+        graph.addVertex("D");
+
+        graph.addEdge("A", "B");
         graph.addEdge("B", "C");
+        graph.addEdge("A", "D");
 
         Iterator<String> path = graph.iteratorShortestPath("A", "C");
 
@@ -143,6 +164,7 @@ class GraphMatrixTest {
     void testToString() {
         graph.addVertex("A");
         graph.addVertex("B");
+        graph.addEdge("A", "B");
 
         String str = graph.toString();
         assertNotNull(str);

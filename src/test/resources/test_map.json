@@ -1,0 +1,42 @@
+{
+  "nome": "Mapa de Teste",
+  "salas": [
+    {
+      "id": "E1",
+      "tipo": "ENTRADA",
+      "descricao": "Entrada"
+    },
+    {
+      "id": "S1",
+      "tipo": "NORMAL",
+      "descricao": "Sala Normal"
+    },
+    {
+      "id": "R1",
+      "tipo": "ENIGMA",
+      "descricao": "Sala Enigma"
+    },
+    {
+      "id": "C1",
+      "tipo": "TESOURO",
+      "descricao": "Centro"
+    }
+  ],
+  "ligacoes": [
+    {
+      "origem": "E1",
+      "destino": "S1",
+      "custo": 2.0,
+      "evento": {
+        "descricao": "Teste Evento",
+        "efeito": "HEAL",
+        "item": "Pocao"
+      }
+    },
+    {
+      "origem": "S1",
+      "destino": "R1",
+      "custo": 1.0
+    }
+  ]
+}

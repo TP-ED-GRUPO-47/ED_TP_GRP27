@@ -6,11 +6,19 @@ import structures.stack.LinkedStack;
 
 import java.util.Iterator;
 
+/**
+ * Graph represents an adjacency matrix implementation of a graph.
+ *
+ */
 public class Graph<T> implements GraphADT<T> {
     protected final int DEFAULT_CAPACITY = 10;
     protected int numVertices;
     protected boolean[][] adjMatrix;
     protected T[] vertices;
+
+    /**
+     * Creates an empty graph.
+     */
 
     public Graph() {
         numVertices = 0;
@@ -18,26 +26,22 @@ public class Graph<T> implements GraphADT<T> {
         this.vertices = (T[]) (new Object[DEFAULT_CAPACITY]);
     }
 
-    // --- Métodos de Gestão ---
-
-    public void addVertex(T vertex) {
-        if (numVertices == vertices.length)
-            expandCapacity();
-
-        vertices[numVertices] = vertex;
-
-        // Inicializar a linha e coluna do novo vértice como false
-        for (int i = 0; i <= numVertices; i++) {
-            adjMatrix[numVertices][i] = false;
-            adjMatrix[i][numVertices] = false;
-        }
-        numVertices++;
-    }
-
+    /**
+     * Inserts an edge between two vertices of the graph.
+     *
+     * @param vertex1 the first vertex
+     * @param vertex2 the second vertex
+     */
+    @Override
     public void addEdge(T vertex1, T vertex2) {
         addEdge(getIndex(vertex1), getIndex(vertex2));
     }
 
+    /**Inserts an edge between two vertices of the graph.
+    *
+     * @param index1 the first index
+    * @param index2 the second index
+    */
     private void addEdge(int index1, int index2) {
         if (indexIsValid(index1) && indexIsValid(index2)) {
             adjMatrix[index1][index2] = true;
@@ -45,8 +49,26 @@ public class Graph<T> implements GraphADT<T> {
         }
     }
 
-    // --- Travessia BFS ---
+    /** Adds a vertex to the graph, expanding the capacity of the graph
+    * if necessary. It also associates an object with the vertex.
+    *
+     * @param vertex the vertex to add to the graph
+    */
+    @Override
+    public void addVertex(T vertex) {
+        if (numVertices == vertices.length)
+            expandCapacity();
 
+        vertices[numVertices] = vertex;
+
+        for (int i = 0; i <= numVertices; i++) {
+            adjMatrix[numVertices][i] = false;
+            adjMatrix[i][numVertices] = false;
+        }
+        numVertices++;
+    }
+
+    @Override
     public Iterator<T> iteratorBFS(T startVertex) {
         return iteratorBFS(getIndex(startVertex));
     }
@@ -63,7 +85,6 @@ public class Graph<T> implements GraphADT<T> {
         for (int i = 0; i < numVertices; i++)
             visited[i] = false;
 
-        // CORREÇÃO: Autoboxing (int -> Integer)
         traversalQueue.enqueue(startIndex);
         visited[startIndex] = true;
 
@@ -73,7 +94,6 @@ public class Graph<T> implements GraphADT<T> {
 
             for (int i = 0; i < numVertices; i++) {
                 if (adjMatrix[x.intValue()][i] && !visited[i]) {
-                    // CORREÇÃO: Autoboxing
                     traversalQueue.enqueue(i);
                     visited[i] = true;
                 }
@@ -82,8 +102,7 @@ public class Graph<T> implements GraphADT<T> {
         return resultList.iterator();
     }
 
-    // --- Travessia DFS ---
-
+    @Override
     public Iterator<T> iteratorDFS(T startVertex) {
         return iteratorDFS(getIndex(startVertex));
     }
@@ -101,7 +120,6 @@ public class Graph<T> implements GraphADT<T> {
         for (int i = 0; i < numVertices; i++)
             visited[i] = false;
 
-        // CORREÇÃO: Autoboxing
         traversalStack.push(startIndex);
         resultList.addToRear(vertices[startIndex]);
         visited[startIndex] = true;
@@ -112,7 +130,6 @@ public class Graph<T> implements GraphADT<T> {
 
             for (int i = 0; (i < numVertices) && !found; i++) {
                 if (adjMatrix[x.intValue()][i] && !visited[i]) {
-                    // CORREÇÃO: Autoboxing
                     traversalStack.push(i);
                     resultList.addToRear(vertices[i]);
                     visited[i] = true;
@@ -125,11 +142,11 @@ public class Graph<T> implements GraphADT<T> {
         return resultList.iterator();
     }
 
-    // --- Métodos Auxiliares ---
 
     protected boolean indexIsValid(int index) {
         return ((index < numVertices) && (index >= 0));
     }
+
 
     protected int getIndex(T vertex) {
         for (int i = 0; i < numVertices; i++)
@@ -152,11 +169,59 @@ public class Graph<T> implements GraphADT<T> {
         adjMatrix = largerAdjMatrix;
     }
 
-    // --- Stubs ---
-    public void removeVertex(T vertex) {}
-    public void removeEdge(T vertex1, T vertex2) {}
+    @Override
+    public void removeVertex(T vertex) {
+        int index = getIndex(vertex);
+
+        if (indexIsValid(index)) {
+            numVertices--;
+
+            for (int i = index; i < numVertices; i++) {
+                vertices[i] = vertices[i+1];
+            }
+            vertices[numVertices] = null;
+
+            for (int i = index; i < numVertices; i++) {
+                for (int j = 0; j <= numVertices; j++) {
+                    adjMatrix[i][j] = adjMatrix[i+1][j];
+                }
+            }
+
+            for (int i = 0; i < numVertices; i++) {
+                for (int j = index; j < numVertices; j++) {
+                    adjMatrix[i][j] = adjMatrix[i][j+1];
+                }
+            }
+        }
+    }
+    @Override
+    public void removeEdge(T vertex1, T vertex2) {
+        removeEdge(getIndex(vertex1), getIndex(vertex2));
+    }
+    private void removeEdge(int index1, int index2) {
+        if (indexIsValid(index1) && indexIsValid(index2)) {
+            adjMatrix[index1][index2] = false;
+            adjMatrix[index2][index1] = false;
+        }
+    }
+    @Override
     public boolean isEmpty() { return numVertices == 0; }
-    public boolean isConnected() { return false; }
+
+    @Override
+    public boolean isConnected() {
+        if (isEmpty()) return false;
+        Iterator<T> it = iteratorBFS(0);
+        int count = 0;
+
+        while (it.hasNext()) {
+            it.next();
+            count++;
+        }
+
+        return count == numVertices;
+    }
+
+    @Override
     public int size() { return numVertices; }
 
     public String toString() {
@@ -167,8 +232,7 @@ public class Graph<T> implements GraphADT<T> {
         return result;
     }
 
-    // --- Caminho Mais Curto ---
-
+    @Override
     public Iterator<T> iteratorShortestPath(T startVertex, T targetVertex) {
         return iteratorShortestPath(getIndex(startVertex), getIndex(targetVertex));
     }
@@ -193,7 +257,6 @@ public class Graph<T> implements GraphADT<T> {
         }
 
         boolean found = false;
-        // CORREÇÃO: Autoboxing
         traversalQueue.enqueue(startIndex);
         visited[startIndex] = true;
 
@@ -209,7 +272,6 @@ public class Graph<T> implements GraphADT<T> {
                 if (adjMatrix[x.intValue()][i] && !visited[i]) {
                     visited[i] = true;
                     predecessor[i] = x.intValue();
-                    // CORREÇÃO: Autoboxing
                     traversalQueue.enqueue(i);
 
                     if (i == targetIndex) {
@@ -226,11 +288,9 @@ public class Graph<T> implements GraphADT<T> {
         int current = targetIndex;
 
         while (current != startIndex && current != -1) {
-            // CORREÇÃO: Autoboxing
             pathStack.push(current);
             current = predecessor[current];
         }
-        // CORREÇÃO: Autoboxing
         pathStack.push(startIndex);
 
         while (!pathStack.isEmpty()) {

@@ -11,10 +11,8 @@ public class NetworkList<T> implements NetworkADT<T> {
     protected int numVertices;
     protected T[] vertices;
 
-    // Array de Listas de "WeightedEdge"
     protected ArrayUnorderedList<WeightedEdge>[] adjList;
 
-    // Classe auxiliar para guardar o vizinho e o peso
     protected class WeightedEdge {
         public int neighborIndex;
         public double weight;
@@ -39,8 +37,8 @@ public class NetworkList<T> implements NetworkADT<T> {
         }
     }
 
-    // --- Métodos de Gestão ---
 
+    @Override
     public void addVertex(T vertex) {
         if (numVertices == vertices.length)
             expandCapacity();
@@ -50,38 +48,94 @@ public class NetworkList<T> implements NetworkADT<T> {
         numVertices++;
     }
 
-    // Adicionar Aresta COM peso
+    @Override
     public void addEdge(T vertex1, T vertex2, double weight) {
         addEdge(getIndex(vertex1), getIndex(vertex2), weight);
     }
 
     private void addEdge(int index1, int index2, double weight) {
         if (indexIsValid(index1) && indexIsValid(index2)) {
-            // Adiciona (vizinho 2, peso) à lista do 1
             WeightedEdge edge1 = new WeightedEdge(index2, weight);
             adjList[index1].addToRear(edge1);
 
-            // Adiciona (vizinho 1, peso) à lista do 2 (Não direcionado)
             WeightedEdge edge2 = new WeightedEdge(index1, weight);
             adjList[index2].addToRear(edge2);
         }
     }
 
-    // Adicionar Aresta SEM peso (assume peso 1.0)
+    @Override
     public void addEdge(T vertex1, T vertex2) {
         addEdge(vertex1, vertex2, 1.0);
     }
 
+    /**
+     * Remove um vértice e atualiza todos os índices nas arestas restantes.
+     */
+    @Override
     public void removeVertex(T vertex) {
-        // Stub
+        int indexToRemove = getIndex(vertex);
+
+        if (indexIsValid(indexToRemove)) {
+            numVertices--;
+
+            for (int i = indexToRemove; i < numVertices; i++) {
+                vertices[i] = vertices[i+1];
+                adjList[i] = adjList[i+1];
+            }
+            vertices[numVertices] = null;
+            adjList[numVertices] = null;
+
+            for (int i = 0; i < numVertices; i++) {
+                ArrayUnorderedList<WeightedEdge> currentList = adjList[i];
+                ArrayUnorderedList<WeightedEdge> newList = new ArrayUnorderedList<>();
+
+                Iterator<WeightedEdge> it = currentList.iterator();
+                while (it.hasNext()) {
+                    WeightedEdge edge = it.next();
+
+                    if (edge.neighborIndex == indexToRemove) {
+                        continue;
+                    } else if (edge.neighborIndex > indexToRemove) {
+                        newList.addToRear(new WeightedEdge(edge.neighborIndex - 1, edge.weight));
+                    } else {
+                        newList.addToRear(edge);
+                    }
+                }
+                adjList[i] = newList;
+            }
+        }
     }
 
+    /**
+     * Remove uma aresta entre dois vértices.
+     */
+    @Override
     public void removeEdge(T vertex1, T vertex2) {
-        // Stub (remover de lista ligada é complexo sem iterador específico)
+        removeEdge(getIndex(vertex1), getIndex(vertex2));
     }
 
-    // --- Travessias ---
+    private void removeEdge(int index1, int index2) {
+        if (indexIsValid(index1) && indexIsValid(index2)) {
+            removeEdgeFromList(index1, index2);
+            removeEdgeFromList(index2, index1);
+        }
+    }
 
+    private void removeEdgeFromList(int sourceIndex, int targetIndex) {
+        ArrayUnorderedList<WeightedEdge> currentList = adjList[sourceIndex];
+        ArrayUnorderedList<WeightedEdge> newList = new ArrayUnorderedList<>();
+
+        Iterator<WeightedEdge> it = currentList.iterator();
+        while (it.hasNext()) {
+            WeightedEdge edge = it.next();
+            if (edge.neighborIndex != targetIndex) {
+                newList.addToRear(edge);
+            }
+        }
+        adjList[sourceIndex] = newList;
+    }
+
+    @Override
     public Iterator<T> iteratorBFS(T startVertex) {
         return iteratorBFS(getIndex(startVertex));
     }
@@ -96,7 +150,6 @@ public class NetworkList<T> implements NetworkADT<T> {
         boolean[] visited = new boolean[numVertices];
         for (int i = 0; i < numVertices; i++) visited[i] = false;
 
-        // CORREÇÃO: Autoboxing
         traversalQueue.enqueue(startIndex);
         visited[startIndex] = true;
 
@@ -108,7 +161,6 @@ public class NetworkList<T> implements NetworkADT<T> {
             while (it.hasNext()) {
                 WeightedEdge edge = it.next();
                 if (!visited[edge.neighborIndex]) {
-                    // CORREÇÃO: Autoboxing
                     traversalQueue.enqueue(edge.neighborIndex);
                     visited[edge.neighborIndex] = true;
                 }
@@ -117,6 +169,7 @@ public class NetworkList<T> implements NetworkADT<T> {
         return resultList.iterator();
     }
 
+    @Override
     public Iterator<T> iteratorDFS(T startVertex) {
         return iteratorDFS(getIndex(startVertex));
     }
@@ -132,7 +185,6 @@ public class NetworkList<T> implements NetworkADT<T> {
 
         for (int i = 0; i < numVertices; i++) visited[i] = false;
 
-        // CORREÇÃO: Autoboxing
         traversalStack.push(startIndex);
         resultList.addToRear(vertices[startIndex]);
         visited[startIndex] = true;
@@ -145,7 +197,6 @@ public class NetworkList<T> implements NetworkADT<T> {
             while (it.hasNext() && !found) {
                 WeightedEdge edge = it.next();
                 if (!visited[edge.neighborIndex]) {
-                    // CORREÇÃO: Autoboxing
                     traversalStack.push(edge.neighborIndex);
                     resultList.addToRear(vertices[edge.neighborIndex]);
                     visited[edge.neighborIndex] = true;
@@ -158,8 +209,8 @@ public class NetworkList<T> implements NetworkADT<T> {
         return resultList.iterator();
     }
 
-    // --- Caminho Mais Curto ---
 
+    @Override
     public Iterator<T> iteratorShortestPath(T startVertex, T targetVertex) {
         return iteratorShortestPath(getIndex(startVertex), getIndex(targetVertex));
     }
@@ -184,7 +235,6 @@ public class NetworkList<T> implements NetworkADT<T> {
         }
 
         boolean found = false;
-        // CORREÇÃO: Autoboxing
         traversalQueue.enqueue(startIndex);
         visited[startIndex] = true;
 
@@ -203,7 +253,6 @@ public class NetworkList<T> implements NetworkADT<T> {
                 if (!visited[edge.neighborIndex]) {
                     visited[edge.neighborIndex] = true;
                     predecessor[edge.neighborIndex] = x.intValue();
-                    // CORREÇÃO: Autoboxing
                     traversalQueue.enqueue(edge.neighborIndex);
 
                     if (edge.neighborIndex == targetIndex) {
@@ -220,11 +269,9 @@ public class NetworkList<T> implements NetworkADT<T> {
         int current = targetIndex;
 
         while (current != startIndex && current != -1) {
-            // CORREÇÃO: Autoboxing
             pathStack.push(current);
             current = predecessor[current];
         }
-        // CORREÇÃO: Autoboxing
         pathStack.push(startIndex);
 
         while (!pathStack.isEmpty()) {
@@ -234,7 +281,59 @@ public class NetworkList<T> implements NetworkADT<T> {
         return resultList.iterator();
     }
 
-    // --- Métodos Auxiliares ---
+
+    @Override
+    public double shortestPathWeight(T vertex1, T vertex2) {
+        int startIndex = getIndex(vertex1);
+        int targetIndex = getIndex(vertex2);
+
+        if (!indexIsValid(startIndex) || !indexIsValid(targetIndex))
+            return Double.POSITIVE_INFINITY;
+
+        if (startIndex == targetIndex) return 0.0;
+
+        double[] pathWeight = new double[numVertices];
+        boolean[] visited = new boolean[numVertices];
+
+        for (int i = 0; i < numVertices; i++) {
+            pathWeight[i] = Double.POSITIVE_INFINITY;
+            visited[i] = false;
+        }
+        pathWeight[startIndex] = 0;
+
+        for (int i = 0; i < numVertices; i++) {
+            int u = -1;
+            double minWeight = Double.POSITIVE_INFINITY;
+
+            for (int j = 0; j < numVertices; j++) {
+                if (!visited[j] && pathWeight[j] < minWeight) {
+                    minWeight = pathWeight[j];
+                    u = j;
+                }
+            }
+
+            if (u == -1) break;
+            visited[u] = true;
+
+            if (u == targetIndex) return pathWeight[u];
+
+            Iterator<WeightedEdge> it = adjList[u].iterator();
+            while (it.hasNext()) {
+                WeightedEdge edge = it.next();
+                int v = edge.neighborIndex;
+                double weight = edge.weight;
+
+                if (!visited[v]) {
+                    if (pathWeight[u] + weight < pathWeight[v]) {
+                        pathWeight[v] = pathWeight[u] + weight;
+                    }
+                }
+            }
+        }
+
+        return pathWeight[targetIndex];
+    }
+
 
     protected boolean indexIsValid(int index) {
         return ((index < numVertices) && (index >= 0));
@@ -263,13 +362,25 @@ public class NetworkList<T> implements NetworkADT<T> {
         adjList = largerAdjList;
     }
 
-
-    // --- Stubs para interface ---
-    public double shortestPathWeight(T vertex1, T vertex2) { return 0; }
+    @Override
     public boolean isEmpty() { return numVertices == 0; }
-    public boolean isConnected() { return false; }
+
+    @Override
+    public boolean isConnected() {
+        if (isEmpty()) return false;
+        Iterator<T> it = iteratorBFS(0);
+        int count = 0;
+        while(it.hasNext()) {
+            it.next();
+            count++;
+        }
+        return count == numVertices;
+    }
+
+    @Override
     public int size() { return numVertices; }
 
+    @Override
     public String toString() {
         String result = "";
         for (int i = 0; i < numVertices; i++) {
@@ -293,7 +404,6 @@ public class NetworkList<T> implements NetworkADT<T> {
             return neighbors.iterator();
         }
 
-        // Como adjList é protected, podemos aceder aqui dentro
         Iterator<WeightedEdge> it = adjList[index].iterator();
         while (it.hasNext()) {
             WeightedEdge edge = it.next();

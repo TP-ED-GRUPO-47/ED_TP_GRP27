@@ -47,6 +47,10 @@ public class GameEngine {
             System.err.println("CRÍTICO: Erro ao carregar o mapa.");
             return;
         }
+        if (!maze.isConnected()) {
+            System.err.println("ERRO CRÍTICO: O mapa carregado não é conexo (existem salas inalcançáveis).");
+            return;
+        }
 
         System.out.print("Quantos jogadores humanos? ");
         int numHumans = 0;
@@ -386,4 +390,5 @@ public class GameEngine {
         System.out.println("Poder: " + p.getPower());
         System.out.println("Saídas: [" + maze.getAvailableExits(current) + "]");
     }
+
 }

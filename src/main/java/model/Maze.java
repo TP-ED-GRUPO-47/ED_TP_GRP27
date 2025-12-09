@@ -266,6 +266,10 @@ public class Maze {
         return sb.toString();
     }
 
+    public boolean isConnected() {
+        return map.isConnected();
+    }
+
     /**
      * Returns the string representation of the maze structure.
      *

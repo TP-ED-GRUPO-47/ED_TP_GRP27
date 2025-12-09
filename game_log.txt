@@ -1,8 +1,8 @@
-[2025-12-09 12:10:02] === LABIRINTO DA GLÓRIA - INÍCIO DA SESSÃO ===
-[2025-12-09 12:10:02] Data/Hora: 2025-12-09 12:10:02
-[2025-12-09 12:10:02] Grupo 27 - Estruturas de Dados 2025/2026
-[2025-12-09 12:10:02] ---------------------------------------------------
-[2025-12-09 12:10:02] Teste Unitário - Mensagem Simples
-[2025-12-09 12:10:02] VITÓRIA! Jogador 'TesterBot' encontrou o tesouro em 5 movimentos!
-[2025-12-09 12:10:02] === FIM DA PARTIDA - VENCEDOR: TesterBot ===
-[2025-12-09 12:10:02] ==================================================
+[2025-12-09 16:22:47] === LABIRINTO DA GLÓRIA - INÍCIO DA SESSÃO ===
+[2025-12-09 16:22:47] Data/Hora: 2025-12-09 16:22:47
+[2025-12-09 16:22:47] Grupo 27 - Estruturas de Dados 2025/2026
+[2025-12-09 16:22:47] ---------------------------------------------------
+[2025-12-09 16:22:47] Teste Unitário - Mensagem Simples
+[2025-12-09 16:22:47] VITÓRIA! Jogador 'TesterBot' encontrou o tesouro em 5 movimentos!
+[2025-12-09 16:22:47] === FIM DA PARTIDA - VENCEDOR: TesterBot ===
+[2025-12-09 16:22:47] ==================================================

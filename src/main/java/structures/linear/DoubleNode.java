@@ -1,5 +1,11 @@
 package structures.linear;
 
+/**
+ * Node for a doubly-linked list.
+ * Contains an element and references to both previous and next nodes.
+ *
+ * @param <E> the type of element stored in this node
+ */
 public class DoubleNode<E> {
     private DoubleNode<E> next;
     private E element;
@@ -35,9 +41,11 @@ public class DoubleNode<E> {
         return next;
     }
 
-    /** Sets the node that precedes this one.
-    * @param dnode the node to be set as the one to precede
-    * the current one */
+    /**
+     * Sets the node that precedes this one.
+     *
+     * @param dnode the node to be set as the one to precede the current one
+     */
     public void setPrevious (DoubleNode<E> dnode) {
         previous = dnode;
     }
@@ -51,17 +59,27 @@ public class DoubleNode<E> {
 
     /**
      * Sets the element stored in this node.
-     * @param elem the element to be stored in this node */
+     *
+     * @param elem the element to be stored in this node
+     */
     public void setElement (E elem){
         element = elem;
     }
 
-    /** Sets the node that follows this one. */
+    /**
+     * Sets the node that follows this one.
+     *
+     * @param dnode the node that will follow the current one
+     */
     public void setNext(DoubleNode<E> dnode) {
         next = dnode;
     }
 
-    /** Returns the node that precedes this one. */
+    /**
+     * Returns the node that precedes this one.
+     *
+     * @return the previous node
+     */
     public DoubleNode<E> getPrevious() {
         return previous;
     }

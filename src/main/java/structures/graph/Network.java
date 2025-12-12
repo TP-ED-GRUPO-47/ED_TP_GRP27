@@ -6,9 +6,20 @@ import structures.stack.LinkedStack;
 
 import java.util.Iterator;
 
+/**
+ * Network implementation using weighted adjacency matrix.
+ * Extends Graph to support weighted edges represented as doubles.
+ *
+ * @param <T> the type of elements stored in this network
+ */
 public class Network<T> extends Graph<T> implements NetworkADT<T> {
+    /** Weighted adjacency matrix storing edge costs. */
     protected double[][] adjMatrix;
 
+    /**
+     * Creates an empty network with default capacity.
+     * Initializes all edge weights to positive infinity.
+     */
     public Network() {
         super();
         this.adjMatrix = new double[DEFAULT_CAPACITY][DEFAULT_CAPACITY];
@@ -70,6 +81,13 @@ public class Network<T> extends Graph<T> implements NetworkADT<T> {
         addEdge(getIndex(vertex1), getIndex(vertex2), weight);
     }
 
+    /**
+     * Inserts a weighted edge between two vertices using indices.
+     *
+     * @param index1 the index of the first vertex
+     * @param index2 the index of the second vertex
+     * @param weight the weight of the edge
+     */
     private void addEdge(int index1, int index2, double weight) {
         if (indexIsValid(index1) && indexIsValid(index2)) {
             adjMatrix[index1][index2] = weight;
@@ -94,7 +112,13 @@ public class Network<T> extends Graph<T> implements NetworkADT<T> {
     }
 
 
-
+    /**
+     * Returns a breadth first iterator starting with the given vertex index.
+     * Considers edges with weights less than infinity as valid connections.
+     *
+     * @param startIndex the index of the starting vertex
+     * @return a breadth first iterator beginning at the given vertex
+     */
     @Override
     public Iterator<T> iteratorBFS(int startIndex) {
         Integer x;
@@ -123,6 +147,13 @@ public class Network<T> extends Graph<T> implements NetworkADT<T> {
         return resultList.iterator();
     }
 
+    /**
+     * Returns a depth first iterator starting with the given vertex index.
+     * Considers edges with weights less than infinity as valid connections.
+     *
+     * @param startIndex the index of the starting vertex
+     * @return a depth first iterator starting at the given vertex
+     */
     @Override
     public Iterator<T> iteratorDFS(int startIndex) {
         Integer x;
@@ -211,6 +242,14 @@ public class Network<T> extends Graph<T> implements NetworkADT<T> {
         return pathWeight[targetIndex];
     }
 
+    /**
+     * Returns an iterator containing the shortest path between two vertices using indices.
+     * Uses Dijkstra's algorithm considering weighted edges.
+     *
+     * @param startIndex the index of the starting vertex
+     * @param targetIndex the index of the target vertex
+     * @return an iterator containing the shortest path
+     */
     @Override
     protected Iterator<T> iteratorShortestPath(int startIndex, int targetIndex) {
         ArrayUnorderedList<T> resultList = new ArrayUnorderedList<T>();
@@ -222,42 +261,44 @@ public class Network<T> extends Graph<T> implements NetworkADT<T> {
             return resultList.iterator();
         }
 
-        LinkedQueue<Integer> traversalQueue = new LinkedQueue<Integer>();
+        double[] pathWeight = new double[numVertices];
         boolean[] visited = new boolean[numVertices];
         int[] predecessor = new int[numVertices];
 
         for (int i = 0; i < numVertices; i++) {
+            pathWeight[i] = Double.POSITIVE_INFINITY;
             visited[i] = false;
             predecessor[i] = -1;
         }
+        pathWeight[startIndex] = 0;
 
-        boolean found = false;
-        traversalQueue.enqueue(startIndex);
-        visited[startIndex] = true;
+        for (int i = 0; i < numVertices; i++) {
+            int u = -1;
+            double minWeight = Double.POSITIVE_INFINITY;
 
-        while (!traversalQueue.isEmpty() && !found) {
-            Integer x = traversalQueue.dequeue();
-
-            if (x.intValue() == targetIndex) {
-                found = true;
-                break;
+            for (int j = 0; j < numVertices; j++) {
+                if (!visited[j] && pathWeight[j] < minWeight) {
+                    minWeight = pathWeight[j];
+                    u = j;
+                }
             }
 
-            for (int i = 0; i < numVertices; i++) {
-                if (adjMatrix[x.intValue()][i] < Double.POSITIVE_INFINITY && !visited[i]) {
-                    visited[i] = true;
-                    predecessor[i] = x.intValue();
-                    traversalQueue.enqueue(i);
+            if (u == -1) break;
+            visited[u] = true;
 
-                    if (i == targetIndex) {
-                        found = true;
-                        break;
+            if (u == targetIndex) break;
+
+            for (int v = 0; v < numVertices; v++) {
+                if (!visited[v] && adjMatrix[u][v] < Double.POSITIVE_INFINITY) {
+                    if (pathWeight[u] + adjMatrix[u][v] < pathWeight[v]) {
+                        pathWeight[v] = pathWeight[u] + adjMatrix[u][v];
+                        predecessor[v] = u;
                     }
                 }
             }
         }
 
-        if (!found) return resultList.iterator();
+        if (pathWeight[targetIndex] == Double.POSITIVE_INFINITY) return resultList.iterator();
 
         LinkedStack<Integer> pathStack = new LinkedStack<Integer>();
         int current = targetIndex;
@@ -275,6 +316,10 @@ public class Network<T> extends Graph<T> implements NetworkADT<T> {
         return resultList.iterator();
     }
 
+    /**
+     * Expands the capacity of the network by doubling the size of arrays.
+     * New edge weights are initialized to positive infinity.
+     */
     @Override
     protected void expandCapacity() {
         T[] largerVertices = (T[]) (new Object[vertices.length * 2]);

@@ -1,5 +1,10 @@
 package structures.queue;
 
+/**
+ * Contract for a first-in-first-out queue.
+ *
+ * @param <T> element type stored in the queue
+ */
 public interface QueueADT<T> {
     /**
      * Adds one element to the rear of this queue.

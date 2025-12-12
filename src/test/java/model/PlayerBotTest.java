@@ -1,10 +1,26 @@
 package model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for {@link Player} and {@link Bot} classes.
+ * <p>
+ * Tests player and bot basic functionality, movement, and statistics.
+ * </p>
+ *
+ * @author Group 27
+ * @version 2025/2026
+ */
 class PlayerBotTest {
 
+    /**
+     * Tests basic player attributes and power management.
+     */
     @Test
     void testPlayerBasics() {
         Player p = new Player("Jogador1");
@@ -24,6 +40,9 @@ class PlayerBotTest {
         assertEquals(0, p.getPower(), "Power não deve ser negativo");
     }
 
+    /**
+     * Tests player movement tracking and history.
+     */
     @Test
     void testPlayerMovementAndHistory() {
         Player p = new Player("Viajante");
@@ -38,12 +57,13 @@ class PlayerBotTest {
         assertEquals(r2, p.getCurrentRoom());
         assertTrue(p.getHistoryString().contains("R2"));
 
-        assertDoesNotThrow(p::printHistory);
-
         assertTrue(p.toString().contains("Viajante"));
         assertTrue(p.toString().contains("R2"));
     }
 
+    /**
+     * Tests bot creation and decision-making for movement.
+     */
     @Test
     void testBotCreationAndMove() {
         Bot bot = new Bot("BotTest");
@@ -63,6 +83,9 @@ class PlayerBotTest {
         assertEquals("R2", targetId);
     }
 
+    /**
+     * Tests bot behavior when trapped in a dead-end room.
+     */
     @Test
     void testBotDeadEnd() {
         Bot bot = new Bot("TrappedBot");

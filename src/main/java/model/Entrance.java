@@ -25,13 +25,13 @@ public class Entrance extends Room {
     /**
      * Executed when a player enters this room.
      * <p>
-     * Displays a welcome message to the console, signaling that the player
-     * is at the starting point of the adventure.
+     * Displays the entrance description. The welcome message "A tua aventura começa aqui!"
+     * is shown during game initialization in GameEngine, not here, to avoid repetition
+     * when players revisit entrance rooms during gameplay.
      * </p>
      */
     @Override
     public void onEnter() {
-        System.out.println("Estás na entrada: " + getDescription());
-        System.out.println("A aventura começa aqui!");
+        System.out.println("\nEstás na entrada: " + getDescription());
     }
 }

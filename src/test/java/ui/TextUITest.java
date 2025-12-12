@@ -1,15 +1,21 @@
 package ui;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.NoSuchElementException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import org.junit.jupiter.api.Test;
 
+/**
+ * Unit tests for the {@link TextUI} class.
+ * <p>
+ * Tests user interface navigation and menu options.
+ * </p>
+ *
+ * @author Group 27
+ * @version 2025/2026
+ */
 class TextUITest {
 
     private final InputStream systemIn = System.in;

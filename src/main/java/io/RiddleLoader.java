@@ -8,6 +8,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import exceptions.InvalidJsonException;
 import model.Riddle;
 import structures.linear.ArrayUnorderedList;
 
@@ -23,10 +24,13 @@ import structures.linear.ArrayUnorderedList;
  * used for random selection."
  * </p>
  *
- * @author Grupo 27
+ * @author Group 27
  * @version 2025/2026
  */
 public class RiddleLoader {
+
+    /** Utility class; no instances required. */
+    private RiddleLoader() { }
 
     /**
      * Loads riddles from a specified JSON file located in the classpath resources.
@@ -38,7 +42,6 @@ public class RiddleLoader {
      * <li>"opcoes": An array of possible answer strings.</li>
      * <li>"correta": The integer index of the correct answer.</li>
      * </ul>
-     * </p>
      *
      * @param fileName The name of the JSON file to load (e.g., "enigmas.json").
      * @return An {@link ArrayUnorderedList} containing the loaded riddles. Returns an empty list if the file is not found or an error occurs.
@@ -48,28 +51,78 @@ public class RiddleLoader {
         JSONParser parser = new JSONParser();
 
         try (InputStream is = RiddleLoader.class.getClassLoader().getResourceAsStream(fileName)) {
-            if (is == null) return riddles;
+            if (is == null) {
+                System.err.println("Ficheiro de enigmas não encontrado: " + fileName);
+                return riddles;
+            }
 
             Object obj = parser.parse(new InputStreamReader(is, StandardCharsets.UTF_8));
+            if (obj == null) {
+                System.err.println("Ficheiro de enigmas vazio ou inválido");
+                return riddles;
+            }
+
             JSONObject jsonObject = (JSONObject) obj;
             JSONArray riddlesArray = (JSONArray) jsonObject.get("enigmas");
 
-            for (Object r : riddlesArray) {
-                JSONObject riddleJson = (JSONObject) r;
-                String question = (String) riddleJson.get("pergunta");
-                int correct = Integer.parseInt(riddleJson.get("correta").toString());
-
-                JSONArray optionsJson = (JSONArray) riddleJson.get("opcoes");
-
-                ArrayUnorderedList<String> options = new ArrayUnorderedList<>();
-                for (Object opt : optionsJson) {
-                    options.addToRear((String) opt);
-                }
-
-                riddles.addToRear(new Riddle(question, options, correct));
+            if (riddlesArray == null || riddlesArray.isEmpty()) {
+                System.err.println("Array 'enigmas' não encontrado ou vazio no ficheiro");
+                return riddles;
             }
+
+            int riddleCount = 0;
+            for (Object r : riddlesArray) {
+                try {
+                    JSONObject riddleJson = (JSONObject) r;
+
+                    String question = (String) riddleJson.get("pergunta");
+                    if (question == null || question.isEmpty()) {
+                        System.err.println("Enigma sem pergunta ignorado");
+                        continue;
+                    }
+
+                    Object correctObj = riddleJson.get("correta");
+                    if (correctObj == null) {
+                        System.err.println("Enigma sem resposta correta ignorado");
+                        continue;
+                    }
+
+                    int correct;
+                    try {
+                        correct = Integer.parseInt(correctObj.toString());
+                    } catch (NumberFormatException e) {
+                        System.err.println("Resposta correta não é um número: " + correctObj);
+                        continue;
+                    }
+
+                    JSONArray optionsJson = (JSONArray) riddleJson.get("opcoes");
+                    if (optionsJson == null || optionsJson.isEmpty()) {
+                        System.err.println("Enigma sem opções ignorado");
+                        continue;
+                    }
+
+                    if (correct < 0 || correct >= optionsJson.size()) {
+                        System.err.println("Índice da resposta correta fora do intervalo: " + correct);
+                        continue;
+                    }
+
+                    ArrayUnorderedList<String> options = new ArrayUnorderedList<>();
+                    for (Object opt : optionsJson) {
+                        if (opt != null) {
+                            options.addToRear(opt.toString());
+                        }
+                    }
+
+                    riddles.addToRear(new Riddle(question, options, correct));
+                    riddleCount++;
+                } catch (Exception e) {
+                    System.err.println("Erro ao processar enigma individual: " + e.getMessage());
+                }
+            }
+            System.out.println("✓ Carregados " + riddleCount + " enigmas!");
         } catch (Exception e) {
-            System.err.println("Erro ao carregar enigmas: " + e.getMessage());
+            System.err.println("ERRO ao carregar enigmas: " + e.getMessage());
+            throw new InvalidJsonException("Erro ao carregar enigmas de " + fileName + ": " + e.getMessage());
         }
         return riddles;
     }

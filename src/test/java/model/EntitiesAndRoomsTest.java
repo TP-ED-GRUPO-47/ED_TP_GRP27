@@ -1,15 +1,31 @@
 package model;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
-import structures.linear.ArrayUnorderedList;
-import static org.junit.jupiter.api.Assertions.*;
 
+import structures.linear.ArrayUnorderedList;
+
+/**
+ * Unit tests for game entities and room types.
+ * <p>
+ * Tests riddle logic, room equals/hashCode, and random events.
+ * </p>
+ *
+ * @author Group 27
+ * @version 2025/2026
+ */
 class EntitiesAndRoomsTest {
 
-    // --- RIDDLE TESTS ---
+    /**
+     * Tests riddle creation and answer checking logic.
+     */
     @Test
     void testRiddleLogic() {
-        // Prepare options
         ArrayUnorderedList<String> options = new ArrayUnorderedList<>();
         options.addToRear("Blue");
         options.addToRear("Red");
@@ -25,28 +41,32 @@ class EntitiesAndRoomsTest {
         assertFalse(riddle.checkAnswer(2), "Index 2 should be incorrect");
     }
 
-    // --- RANDOM EVENT TESTS ---
+    /**
+     * Tests random event with a direct effect.
+     */
     @Test
     void testRandomEventFull() {
-        Item item = new Item("Gold Coin", Effect.BONUS_POWER);
-        RandomEvent event = new RandomEvent("You found a chest!", item, Effect.HEAL);
+        RandomEvent event = new RandomEvent("You found a chest!", Effect.HEAL);
 
         assertEquals(Effect.HEAL, event.getDirectEffect());
-        assertEquals(item, event.getItem());
 
-        assertDoesNotThrow(event::trigger);
+        assertDoesNotThrow(() -> event.trigger(new Player("Tester")));
     }
 
+    /**
+     * Tests random event with null effect.
+     */
     @Test
     void testRandomEventNulls() {
-        RandomEvent event = new RandomEvent("Empty wind...", null, null);
+        RandomEvent event = new RandomEvent("Empty wind...", null);
 
-        assertNull(event.getItem());
         assertNull(event.getDirectEffect());
-        assertDoesNotThrow(event::trigger);
+        assertDoesNotThrow(() -> event.trigger(null));
     }
 
-    // --- ROOM & ROOM STANDARD TESTS ---
+    /**
+     * Tests standard room creation, equality, and basic operations.
+     */
     @Test
     void testRoomStandardAndBaseLogic() {
         Room r1 = new RoomStandard("S1", "Standard Room");
@@ -65,7 +85,9 @@ class EntitiesAndRoomsTest {
         assertTrue(r1.toString().contains("S1"));
     }
 
-    // --- RIDDLE ROOM TESTS ---
+    /**
+     * Tests riddle room initialization and puzzle interaction.
+     */
     @Test
     void testRiddleRoomLogic() {
         Riddle r = new Riddle("Q", new ArrayUnorderedList<>(), 0);

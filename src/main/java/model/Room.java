@@ -1,7 +1,5 @@
 package model;
 
-import java.util.Objects;
-
 /**
  * Abstract class representing a generic room in the maze.
  * <p>
@@ -65,10 +63,20 @@ public abstract class Room {
      */
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Room)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Room)) {
+            return false;
+        }
         Room room = (Room) o;
-        return Objects.equals(id, room.id);
+        if (id == null && room.id == null) {
+            return true;
+        }
+        if (id == null || room.id == null) {
+            return false;
+        }
+        return id.equals(room.id);
     }
 
     /**
@@ -78,7 +86,7 @@ public abstract class Room {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return id == null ? 0 : id.hashCode();
     }
 
     /**

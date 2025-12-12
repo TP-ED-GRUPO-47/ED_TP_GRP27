@@ -1,5 +1,10 @@
 package structures.queue;
 
+/**
+ * Node for a linked structure storing an element and a reference to the next node.
+ *
+ * @param <T> the type of element stored in this node
+ */
 public class LinearNode<T> {
     /** reference to next node in list */
     private T element;
@@ -24,7 +29,8 @@ public class LinearNode<T> {
     /**
      * Returns the node that follows this one.
      *
-     * @return LinearNode<T> reference to next node*/
+     * @return reference to the next node
+     */
     public LinearNode<T> getNext() {
         return next;
     }

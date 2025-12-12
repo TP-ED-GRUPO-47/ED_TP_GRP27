@@ -3,8 +3,8 @@ package model;
 /**
  * Represents an effect that can be applied to a player.
  * <p>
- * These effects are triggered by items found in the maze or by random events
- * occurring in corridors. They can modify the player's power/health or cause
+ * These effects are triggered by random events occurring in corridors. 
+ * They can modify the player's power/health or cause
  * state changes like position swapping or skipping turns.
  * </p>
  *
@@ -25,16 +25,34 @@ public enum Effect {
     TRAP(-30),
 
     /**
-     * Special effect: Forces the player to swap positions with another random player.
+     * Special effect: Forces the player to swap positions with another player of their choice.
      * Value is 0 because the effect is logical, not numerical.
      */
     SWAP_POSITION(0),
 
     /**
+     * Special effect: Swaps all players' positions simultaneously.
+     * Implements a circular rotation or random permutation of all player positions.
+     */
+    SWAP_ALL(0),
+
+    /**
+     * Special effect: Grants the player an extra turn immediately.
+     * The player will be enqueued again to play twice in a row.
+     */
+    EXTRA_TURN(0),
+
+    /**
      * Special effect: Forces the player to lose their next turn.
      * Value is 0 because the effect is logical, not numerical.
      */
-    SKIP_TURN(0);
+    SKIP_TURN(0),
+
+    /**
+     * Special effect: Forces the player to move backward in their path.
+     * Value indicates number of steps to retreat (e.g., -2 means go back 2 rooms).
+     */
+    RECEDE(-2);
 
     /** The numerical magnitude of the effect (positive for gain, negative for loss). */
     private final int value;

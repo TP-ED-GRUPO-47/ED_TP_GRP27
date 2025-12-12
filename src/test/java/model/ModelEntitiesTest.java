@@ -1,11 +1,26 @@
 package model;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for model entities.
+ * <p>
+ * Tests {@link Effect}, {@link Corridor}, and {@link RandomEvent}.
+ * </p>
+ *
+ * @author Group 27
+ * @version 2025/2026
+ */
 class ModelEntitiesTest {
 
-    // --- Testes de Effect ---
+    /**
+     * Tests that effect constants have correct values.
+     */
     @Test
     void testEffectValues() {
         assertEquals(20, Effect.HEAL.getValue());
@@ -16,23 +31,14 @@ class ModelEntitiesTest {
         assertEquals(0, Effect.SKIP_TURN.getValue());
     }
 
-    // --- Testes de Item ---
-    @Test
-    void testItemCreation() {
-        // Testa construtor e getters do Item
-        Item potion = new Item("Health Potion", Effect.HEAL);
-
-        assertEquals("Health Potion", potion.getName());
-        assertEquals(Effect.HEAL, potion.getEffect());
-        assertEquals("Health Potion (HEAL)", potion.toString());
-    }
-
-    // --- Testes de Corridor ---
+    /**
+     * Tests corridor creation with events and weight.
+     */
     @Test
     void testCorridor() {
         Room r1 = new RoomStandard("A", "Sala A");
         Room r2 = new RoomStandard("B", "Sala B");
-        RandomEvent event = new RandomEvent("Evento Teste", null, null);
+        RandomEvent event = new RandomEvent("Evento Teste", null);
 
         Corridor c = new Corridor(r1, r2, 5.0, event);
 
@@ -41,12 +47,16 @@ class ModelEntitiesTest {
         assertEquals(5.0, c.getWeight());
         assertEquals(event, c.getEvent());
 
-        assertDoesNotThrow(c::triggerEvent);
+        Player p = new Player("Tester");
+        assertDoesNotThrow(() -> c.triggerEvent(p));
 
         assertTrue(c.toString().contains("A --(5.0)--> B"));
         assertTrue(c.toString().contains("[EVENT]"));
     }
 
+    /**
+     * Tests corridor without events.
+     */
     @Test
     void testCorridorNoEvent() {
         Room r1 = new RoomStandard("A", "Sala A");
@@ -54,7 +64,7 @@ class ModelEntitiesTest {
 
         Corridor c = new Corridor(r1, r2, 1.0, null);
         assertNull(c.getEvent());
-        assertDoesNotThrow(c::triggerEvent);
+        assertDoesNotThrow(() -> c.triggerEvent(null));
         assertFalse(c.toString().contains("[EVENT]"));
     }
 }

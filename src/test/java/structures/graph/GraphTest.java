@@ -1,11 +1,25 @@
 package structures.graph;
 
+import java.util.Iterator;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.util.Iterator;
-import static org.junit.jupiter.api.Assertions.*;
 
-class GraphMatrixTest {
+/**
+ * Unit tests for the {@link Graph} class (adjacency matrix implementation).
+ * <p>
+ * Tests unweighted graph operations using matrix representation.
+ * </p>
+ *
+ * @author Group 27
+ * @version 2025/2026
+ */
+class GraphTest {
 
     private Graph<String> graph;
 
@@ -14,6 +28,9 @@ class GraphMatrixTest {
         graph = new Graph<>();
     }
 
+    /**
+     * Tests adding vertices and checking graph size.
+     */
     @Test
     void testAddVertexAndSize() {
         assertTrue(graph.isEmpty(), "Grafo deve iniciar vazio");
@@ -26,6 +43,9 @@ class GraphMatrixTest {
         assertEquals(2, graph.size());
     }
 
+    /**
+     * Tests that the graph automatically expands capacity when adding many vertices.
+     */
     @Test
     void testExpandCapacity() {
         for (int i = 0; i < 15; i++) {
@@ -45,6 +65,9 @@ class GraphMatrixTest {
         assertTrue(foundV14, "V14 deve ser alcançável a partir de V0 após expansão da matriz");
     }
 
+    /**
+     * Tests adding edges and breadth-first search traversal.
+     */
     @Test
     void testAddEdgeAndBFS() {
         graph.addVertex("A");
@@ -62,6 +85,9 @@ class GraphMatrixTest {
         assertEquals("C", bfs.next());
     }
 
+    /**
+     * Tests depth-first search traversal.
+     */
     @Test
     void testDFS() {
         graph.addVertex("A");
@@ -79,6 +105,9 @@ class GraphMatrixTest {
         assertEquals("C", dfs.next());
     }
 
+    /**
+     * Tests finding the shortest path between two vertices.
+     */
     @Test
     void testShortestPath() {
 
@@ -98,6 +127,9 @@ class GraphMatrixTest {
         assertFalse(path.hasNext());
     }
 
+    /**
+     * Tests shortest path when source and target are the same vertex.
+     */
     @Test
     void testShortestPathSameVertex() {
         graph.addVertex("A");
@@ -108,6 +140,9 @@ class GraphMatrixTest {
         assertFalse(path.hasNext());
     }
 
+    /**
+     * Tests that no path is returned when vertices are not connected.
+     */
     @Test
     void testNoPath() {
         graph.addVertex("A");
@@ -117,6 +152,9 @@ class GraphMatrixTest {
         assertFalse(path.hasNext());
     }
 
+    /**
+     * Tests behavior with invalid vertices or operations.
+     */
     @Test
     void testInvalidOperations() {
         Iterator<String> it = graph.iteratorBFS("Z");
@@ -125,10 +163,13 @@ class GraphMatrixTest {
         it = graph.iteratorDFS("Z");
         assertFalse(it.hasNext());
 
-        it = graph.iteratorShortestPath("A", "Z"); // A existe, Z não
+        it = graph.iteratorShortestPath("A", "Z");
         assertFalse(it.hasNext());
     }
 
+    /**
+     * Tests stub methods that are not fully implemented.
+     */
     @Test
     void testStubs() {
         graph.addVertex("A");
@@ -139,6 +180,9 @@ class GraphMatrixTest {
         assertFalse(graph.isConnected(), "isConnected está hardcoded para false");
     }
 
+    /**
+     * Tests string representation of the graph.
+     */
     @Test
     void testToString() {
         graph.addVertex("A");

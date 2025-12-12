@@ -1,0 +1,293 @@
+{
+  "nome": "A Dungeon Épica dos Desafios e da Glória",
+  "salas": [
+    {
+      "id": "EntradaNorte",
+      "tipo": "ENTRADA",
+      "descricao": "Portal Norte - Runas azuis brilham intensamente. Um portal gélido."
+    },
+    {
+      "id": "EntradaSul",
+      "tipo": "ENTRADA",
+      "descricao": "Portal Sul - Chamas vermelhas dançam à entrada. Um portal ardente."
+    },
+    {
+      "id": "EntradaOeste",
+      "tipo": "ENTRADA",
+      "descricao": "Portal Oeste - Névoa verde flui. Um portal misterioso."
+    },
+    {
+      "id": "NexoCentral",
+      "tipo": "NORMAL",
+      "descricao": "O Nexo Dimensional - O coração da Dungeon. Todos os caminhos convergem."
+    },
+    {
+      "id": "TemploDragao",
+      "tipo": "ENIGMA",
+      "descricao": "Templo do Dragão Ancião - Estátuas de dragão testam a tua mente."
+    },
+    {
+      "id": "CamaraAlavancas",
+      "tipo": "ALAVANCA",
+      "descricao": "Câmara das Mil Alavancas - Um puzzle mecânico complexo de precisão."
+    },
+    {
+      "id": "BosqueEncantado",
+      "tipo": "NORMAL",
+      "descricao": "Um bosque dentro da dungeon. Árvores luminescentes e sons de fadas."
+    },
+    {
+      "id": "LagoEspelhado",
+      "tipo": "NORMAL",
+      "descricao": "Um lago que reflete dimensões paralelas. As águas são enganadoras."
+    },
+    {
+      "id": "SalaAlquimia",
+      "tipo": "ENIGMA",
+      "descricao": "Laboratório de Alquimia - Caldeirões borbulham. A solução está numa fórmula."
+    },
+    {
+      "id": "PonteAbissal",
+      "tipo": "NORMAL",
+      "descricao": "Uma ponte estreita suspensa sobre um abismo sem fundo. Passagem perigosa."
+    },
+    {
+      "id": "TorreRelogio",
+      "tipo": "ALAVANCA",
+      "descricao": "Torre do Relógio Temporal - Engrenagens manipulam o fluxo do tempo."
+    },
+    {
+      "id": "SantuarioEstelar",
+      "tipo": "NORMAL",
+      "descricao": "O teto mostra constelações em movimento. Uma visão celestial."
+    },
+    {
+      "id": "CriptalProfunda",
+      "tipo": "ENIGMA",
+      "descricao": "Cripta dos Magos Negros - Energia sombria pulsa. O conhecimento proibido é necessário."
+    },
+    {
+      "id": "ForjaAncestral",
+      "tipo": "NORMAL",
+      "descricao": "Forja onde armas legendárias foram criadas. O calor é opressor."
+    },
+    {
+      "id": "SalaTronos",
+      "tipo": "ALAVANCA",
+      "descricao": "Sala dos Três Tronos - Cada trono controla uma parte do mecanismo final."
+    },
+    {
+      "id": "CorredorInfinito",
+      "tipo": "NORMAL",
+      "descricao": "Corredor que distorce o espaço. Parece não ter fim."
+    },
+    {
+      "id": "CavernasCristais",
+      "tipo": "NORMAL",
+      "descricao": "Cristais gigantes emitem sons melodiosos. O chão é instável."
+    },
+    {
+      "id": "PortalFinal",
+      "tipo": "ENIGMA",
+      "descricao": "O Portal Guardião - Cinco enigmas simultâneos. O derradeiro teste."
+    },
+    {
+      "id": "SalaDosSegredos",
+      "tipo": "ENIGMA",
+      "descricao": "Sala dos Segredos Eternos - Conhecimento antigo sussurra das paredes."
+    },
+    {
+      "id": "CamaraDestino",
+      "tipo": "NORMAL",
+      "descricao": "A última barreira. Uma câmara de poder puro antes do tesouro."
+    },
+    {
+      "id": "SalaTesouroDragao",
+      "tipo": "TESOURO",
+      "descricao": "O Tesouro do Dragão Ancião! VITÓRIA SUPREMA E RIQUEZAS!"
+    }
+  ],
+  "ligacoes": [
+    {
+      "origem": "EntradaNorte",
+      "destino": "NexoCentral",
+      "custo": 2.0,
+      "evento": {
+        "descricao": "A energia arcana do portal revigora-te, sentes um bónus de poder.",
+        "efeito": "BONUS_POWER"
+      }
+    },
+    {
+      "origem": "EntradaSul",
+      "destino": "BosqueEncantado",
+      "custo": 3.0
+    },
+    {
+      "origem": "EntradaOeste",
+      "destino": "LagoEspelhado",
+      "custo": 2.0,
+      "evento": {
+        "descricao": "A névoa do portal causa um teletransporte instável, trocando-te aleatoriamente com outro jogador.",
+        "efeito": "SWAP_POSITION"
+      }
+    },
+    {
+      "origem": "NexoCentral",
+      "destino": "TemploDragao",
+      "custo": 4.0
+    },
+    {
+      "origem": "NexoCentral",
+      "destino": "CamaraAlavancas",
+      "custo": 3.0
+    },
+    {
+      "origem": "NexoCentral",
+      "destino": "PonteAbissal",
+      "custo": 5.0,
+      "evento": {
+        "descricao": "As tábuas da ponte partem-se! Quase caíste, a armadilha causa-te dano.",
+        "efeito": "TRAP"
+      }
+    },
+    {
+      "origem": "TemploDragao",
+      "destino": "SalaAlquimia",
+      "custo": 3.0
+    },
+    {
+      "origem": "CamaraAlavancas",
+      "destino": "TorreRelogio",
+      "custo": 2.0
+    },
+    {
+      "origem": "BosqueEncantado",
+      "destino": "LagoEspelhado",
+      "custo": 2.0,
+      "evento": {
+        "descricao": "Frutas mágicas do bosque restauram a tua vitalidade. Encontraste uma Fruta Mágica.",
+        "efeito": "HEAL"
+      }
+    },
+    {
+      "origem": "LagoEspelhado",
+      "destino": "NexoCentral",
+      "custo": 3.0
+    },
+    {
+      "origem": "LagoEspelhado",
+      "destino": "SantuarioEstelar",
+      "custo": 4.0,
+      "evento": {
+        "descricao": "A água reflete uma Estrela Cadente, concedendo-te uma jogada extra.",
+        "efeito": "EXTRA_TURN"
+      }
+    },
+    {
+      "origem": "SalaAlquimia",
+      "destino": "CriptalProfunda",
+      "custo": 5.0,
+      "evento": {
+        "descricao": "Um Elixir Místico deixado na Sala de Alquimia regenera a tua energia.",
+        "efeito": "HEAL"
+      }
+    },
+    {
+      "origem": "PonteAbissal",
+      "destino": "TorreRelogio",
+      "custo": 3.0,
+      "evento": {
+        "descricao": "Vento abissal muito forte na ponte empurra-te, forçando-te a recuar no caminho.",
+        "efeito": "RECEDE"
+      }
+    },
+    {
+      "origem": "TorreRelogio",
+      "destino": "SantuarioEstelar",
+      "custo": 2.0
+    },
+    {
+      "origem": "SantuarioEstelar",
+      "destino": "CriptalProfunda",
+      "custo": 4.0,
+      "evento": {
+        "descricao": "O Caos Dimensional do santuário ativa-se. Todos os jogadores trocam de posição.",
+        "efeito": "SWAP_ALL"
+      }
+    },
+    {
+      "origem": "CriptalProfunda",
+      "destino": "ForjaAncestral",
+      "custo": 3.0
+    },
+    {
+      "origem": "ForjaAncestral",
+      "destino": "SalaTronos",
+      "custo": 4.0,
+      "evento": {
+        "descricao": "Uma arma maldita na forja ataca-te ao passares, causando-te dano.",
+        "efeito": "DAMAGE"
+      }
+    },
+    {
+      "origem": "SalaTronos",
+      "destino": "CorredorInfinito",
+      "custo": 2.0
+    },
+    {
+      "origem": "CorredorInfinito",
+      "destino": "CavernasCristais",
+      "custo": 6.0,
+      "evento": {
+        "descricao": "A ressonância cristalina confunde-te no Corredor Infinito. Perdes a próxima jogada.",
+        "efeito": "SKIP_TURN"
+      }
+    },
+    {
+      "origem": "CavernasCristais",
+      "destino": "PortalFinal",
+      "custo": 5.0,
+      "evento": {
+        "descricao": "O brilho de um cristal da sabedoria aumenta o teu poder ao atravessares a caverna.",
+        "efeito": "BONUS_POWER"
+      }
+    },
+    {
+      "origem": "SantuarioEstelar",
+      "destino": "PortalFinal",
+      "custo": 7.0
+    },
+    {
+      "origem": "ForjaAncestral",
+      "destino": "PortalFinal",
+      "custo": 8.0,
+      "evento": {
+        "descricao": "As chamas da forja disparam uma armadilha, causando dano ao tentar forçar a passagem.",
+        "efeito": "TRAP"
+      }
+    },
+    {
+      "origem": "PortalFinal",
+      "destino": "SalaDosSegredos",
+      "custo": 5.0
+    },
+    {
+      "origem": "SalaDosSegredos",
+      "destino": "CamaraDestino",
+      "custo": 6.0,
+      "evento": {
+        "descricao": "Os segredos ancestrais revelam-te um caminho de magia pura, restaurando tua energia.",
+        "efeito": "HEAL"
+      }
+    },
+    {
+      "origem": "CamaraDestino",
+      "destino": "SalaTesouroDragao",
+      "custo": 10.0,
+      "evento": {
+        "descricao": "O último desafio do Dragão antes de alcançares o tesouro, sofres dano do seu sopro residual.",
+        "efeito": "DAMAGE"
+      }
+    }
+  ]
+}

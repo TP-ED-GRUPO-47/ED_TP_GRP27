@@ -34,6 +34,6 @@ public class Center extends Room {
      */
     @Override
     public void onEnter() {
-        System.out.println("ENCONTRASTE O TESOURO! " + getDescription());
+        System.out.println("Encontraste o tesouro: " + getDescription());
     }
 }

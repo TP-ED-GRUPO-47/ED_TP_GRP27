@@ -31,6 +31,6 @@ public class RoomStandard extends Room {
      */
     @Override
     public void onEnter() {
-        System.out.println("Entraste numa sala normal: " + getDescription());
+        System.out.println("\nEntraste numa sala normal: " + getDescription());
     }
 }

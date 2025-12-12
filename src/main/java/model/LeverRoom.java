@@ -3,10 +3,15 @@ package model;
 import java.util.Random;
 
 /**
- * Represents a room containing a lever that triggers unpredictable effects in the game.
+ * Represents a room containing a lever that requires correct interaction to unlock paths.
  * <p>
- * [cite_start]Interacting with the lever can open secret paths[cite: 33], grant items, or activate traps.
- * This class fulfills the project requirement regarding "levers" and "unexpected effects".
+ * According to the specification:
+ * "Divisões com alavancas: o jogador deve tentar ativá-las para desbloquear passagens.
+ * Uma escolha correta abre o caminho; uma escolha errada mantém o bloqueio e o jogador
+ * terá de tentar de novo numa jogada futura."
+ * </p>
+ * <p>
+ * The lever has a binary outcome (correct/incorrect attempt), not random probabilities.
  * </p>
  *
  * @author Group 27
@@ -15,19 +20,19 @@ import java.util.Random;
 public class LeverRoom extends Room {
 
     /**
-     * Defines the possible outcomes of pulling the lever.
+     * Defines the possible outcomes of interacting with the lever.
      */
     public enum LeverResult {
-        /** The lever opens a new path or secret passage. */
-        UNLOCK_PATH,
-        /** The lever triggers a trap, damaging the player. */
-        TRAP,
-        /** The lever does nothing (a dud). */
-        NOTHING
+        /** The correct choice opens a new path or secret passage. */
+        CORRECT_CHOICE,
+        /** The incorrect choice fails to open the path. The player can try again. */
+        INCORRECT_CHOICE,
+        /** The lever has already been successfully solved. */
+        ALREADY_SOLVED
     }
 
-    private final Random random = new Random();
-    private boolean activated = false;
+    private boolean solved = false;
+    private int attemptCount = 0;
 
     /**
      * Constructs a new LeverRoom.
@@ -41,54 +46,51 @@ public class LeverRoom extends Room {
 
     /**
      * Executed when a player enters the room.
-     * <p>
-     * Displays the status of the lever (whether it is ready to be pulled or already jammed/used).
-     * </p>
      */
     @Override
     public void onEnter() {
-        System.out.println(">> [LEVER] " + getDescription());
-        if (activated) {
-            System.out.println("The lever is jammed in the final position.");
+        System.out.println("\n" + getDescription());
+        if (solved) {
+            System.out.println("A alavanca foi ativada com sucesso. O caminho está aberto.");
         } else {
-            System.out.println("A mysterious lever is on the wall.");
+            System.out.println("Uma alavanca misteriosa está na parede. Consegues ativá-la?");
         }
     }
 
     /**
-     * Checks if the lever has already been activated.
+     * Checks if the lever has been successfully activated (correct choice made).
      *
-     * @return true if the lever was already pulled, false otherwise.
+     * @return true if the lever was solved, false otherwise.
      */
-    public boolean isActivated() {
-        return activated;
+    public boolean isSolved() {
+        return solved;
     }
 
     /**
-     * Activates the lever and generates a random effect.
+     * Attempts to activate the lever with a given choice.
      * <p>
-     * Probabilities:
-     * <ul>
-     * [cite_start]<li>40% chance to unlock a path[cite: 33].</li>
-     * <li>30% chance to trigger a trap.</li>
-     * <li>30% chance of nothing happening.</li>
-     * </ul>
+     * The player has a 50% chance to guess correctly on each attempt.
+     * A correct guess unlocks the path.
+     * An incorrect guess requires trying again in a future turn.
      * </p>
      *
-     * @return The result of the action (UNLOCK_PATH, TRAP, or NOTHING).
+     * @return The result of the attempt (CORRECT_CHOICE, INCORRECT_CHOICE, or ALREADY_SOLVED).
      */
-    public LeverResult pullLever() {
-        if (activated) return LeverResult.NOTHING;
+    public LeverResult attemptLever() {
+        if (solved) {
+            return LeverResult.ALREADY_SOLVED;
+        }
 
-        activated = true;
-        int chance = random.nextInt(100);
+        attemptCount++;
+        Random random = new Random();
+        boolean isCorrect = random.nextBoolean();
 
-        if (chance < 40) {
-            return LeverResult.UNLOCK_PATH;
-        } else if (chance < 70) {
-            return LeverResult.TRAP;
+        if (isCorrect) {
+            solved = true;
+            return LeverResult.CORRECT_CHOICE;
         } else {
-            return LeverResult.NOTHING;
+            return LeverResult.INCORRECT_CHOICE;
         }
     }
+
 }

@@ -1,0 +1,254 @@
+{
+  "nome": "O Grande Labirinto da Glória e do Desespero",
+  "salas": [
+    {
+      "id": "EntradaNorte",
+      "tipo": "ENTRADA",
+      "descricao": "Porta Norte - Um portal de pedra coberto de runas antigas."
+    },
+    {
+      "id": "EntradaSul",
+      "tipo": "ENTRADA",
+      "descricao": "Porta Sul - Uma entrada escura com correntes enferrujadas."
+    },
+    {
+      "id": "HallCentral",
+      "tipo": "NORMAL",
+      "descricao": "O Grande Hall. Estátuas de guerreiros sem olhos observam-te."
+    },
+    {
+      "id": "BibliotecaAncestral",
+      "tipo": "ENIGMA",
+      "descricao": "Uma biblioteca empoeirada. O sábio fantasma exige conhecimento."
+    },
+    {
+      "id": "SalaAlavanca1",
+      "tipo": "ALAVANCA",
+      "descricao": "Câmara Mecânica Oeste - Um complexo sistema de roldanas e engrenagens."
+    },
+    {
+      "id": "SalaAlavanca2",
+      "tipo": "ALAVANCA",
+      "descricao": "Câmara Mecânica Este - Mecanismo de bronze e ferro, quase bloqueado."
+    },
+    {
+      "id": "JardimMaldito",
+      "tipo": "NORMAL",
+      "descricao": "Um jardim sombrio onde plantas carnívoras se movem lentamente."
+    },
+    {
+      "id": "Cripta",
+      "tipo": "ENIGMA",
+      "descricao": "A Cripta dos Reis Caídos. Ossos e sussurros de enigmas."
+    },
+    {
+      "id": "SalaTeletransporte",
+      "tipo": "NORMAL",
+      "descricao": "Uma sala circular, símbolos arcanos no chão. O ar vibra."
+    },
+    {
+      "id": "LabirintoEspelhos",
+      "tipo": "NORMAL",
+      "descricao": "Corredores infinitos de espelhos que distorcem a tua imagem."
+    },
+    {
+      "id": "CavernaSubterranea",
+      "tipo": "NORMAL",
+      "descricao": "Uma caverna húmida com estalactites. O caminho é escorregadio."
+    },
+    {
+      "id": "SalaEnigmaFinal",
+      "tipo": "ENIGMA",
+      "descricao": "O Portal Selado. O teste final de sabedoria é triplo."
+    },
+    {
+      "id": "SalaEnigmaAvancada",
+      "tipo": "ENIGMA",
+      "descricao": "Câmara de Conhecimento Avançado - Apenas os mais sábios progridem."
+    },
+    {
+      "id": "AnteCamara",
+      "tipo": "NORMAL",
+      "descricao": "A Antecâmara do Tesouro. A luz dourada aparece por debaixo da porta."
+    },
+    {
+      "id": "SalaTesouro",
+      "tipo": "TESOURO",
+      "descricao": "A Sala do Trono Dourado! A glória do Labirinto é tua!"
+    },
+    {
+      "id": "ArenaGladiadores",
+      "tipo": "NORMAL",
+      "descricao": "Uma arena circular. O cheiro a ferro e sangue é forte."
+    },
+    {
+      "id": "TorreVigia",
+      "tipo": "NORMAL",
+      "descricao": "O topo da torre. A vista permite ver quase todo o labirinto."
+    }
+  ],
+  "ligacoes": [
+    {
+      "origem": "EntradaNorte",
+      "destino": "HallCentral",
+      "custo": 1.0
+    },
+    {
+      "origem": "EntradaSul",
+      "destino": "CavernaSubterranea",
+      "custo": 2.0,
+      "evento": {
+        "descricao": "Escorregaste em musgo na descida para a caverna. Sofres uma lesão menor.",
+        "efeito": "DAMAGE"
+      }
+    },
+    {
+      "origem": "HallCentral",
+      "destino": "BibliotecaAncestral",
+      "custo": 3.0,
+      "evento": {
+        "descricao": "Encontraste um Pergaminho de Sabedoria na base de uma estátua, o que te dá um impulso de poder.",
+        "efeito": "BONUS_POWER"
+      }
+    },
+    {
+      "origem": "HallCentral",
+      "destino": "SalaAlavanca1",
+      "custo": 2.0
+    },
+    {
+      "origem": "HallCentral",
+      "destino": "ArenaGladiadores",
+      "custo": 4.0,
+      "evento": {
+        "descricao": "Um espírito guerreiro materializa-se no Hall. Tens de evitar o combate, perdendo a tua vez.",
+        "efeito": "SKIP_TURN"
+      }
+    },
+    {
+      "origem": "BibliotecaAncestral",
+      "destino": "SalaAlavanca2",
+      "custo": 2.0
+    },
+    {
+      "origem": "BibliotecaAncestral",
+      "destino": "TorreVigia",
+      "custo": 5.0,
+      "evento": {
+        "descricao": "O ar puro e o conhecimento da Torre Vigia revigoram-te, sentes-te curado.",
+        "efeito": "HEAL"
+      }
+    },
+    {
+      "origem": "SalaAlavanca1",
+      "destino": "JardimMaldito",
+      "custo": 3.0
+    },
+    {
+      "origem": "SalaAlavanca2",
+      "destino": "LabirintoEspelhos",
+      "custo": 2.0,
+      "evento": {
+        "descricao": "A magia instável dos espelhos é ativada. Todos os jogadores trocam de posição.",
+        "efeito": "SWAP_ALL"
+      }
+    },
+    {
+      "origem": "JardimMaldito",
+      "destino": "Cripta",
+      "custo": 4.0,
+      "evento": {
+        "descricao": "Uma planta venenosa liberta esporos. A armadilha causa-te dano.",
+        "efeito": "TRAP"
+      }
+    },
+    {
+      "origem": "JardimMaldito",
+      "destino": "SalaTeletransporte",
+      "custo": 3.0,
+      "evento": {
+        "descricao": "O portal de teletransporte instável no Jardim troca a tua posição com um outro jogador.",
+        "efeito": "SWAP_POSITION"
+      }
+    },
+    {
+      "origem": "Cripta",
+      "destino": "LabirintoEspelhos",
+      "custo": 3.0
+    },
+    {
+      "origem": "LabirintoEspelhos",
+      "destino": "SalaTeletransporte",
+      "custo": 2.0,
+      "evento": {
+        "descricao": "Uma ilusão poderosa do labirinto força-te a recuar, voltando ao corredor anterior.",
+        "efeito": "RECEDE"
+      }
+    },
+    {
+      "origem": "SalaTeletransporte",
+      "destino": "CavernaSubterranea",
+      "custo": 1.0
+    },
+    {
+      "origem": "CavernaSubterranea",
+      "destino": "ArenaGladiadores",
+      "custo": 4.0,
+      "evento": {
+        "descricao": "Encontras uma fonte de água mineral escondida na caverna, recuperando energia.",
+        "efeito": "HEAL"
+      }
+    },
+    {
+      "origem": "ArenaGladiadores",
+      "destino": "TorreVigia",
+      "custo": 3.0
+    },
+    {
+      "origem": "TorreVigia",
+      "destino": "SalaEnigmaFinal",
+      "custo": 5.0,
+      "evento": {
+        "descricao": "Encontraste uma Relíquia Temporal, o tempo desacelera e ganhas uma jogada extra.",
+        "efeito": "EXTRA_TURN"
+      }
+    },
+    {
+      "origem": "LabirintoEspelhos",
+      "destino": "SalaEnigmaFinal",
+      "custo": 6.0
+    },
+    {
+      "origem": "Cripta",
+      "destino": "AnteCamara",
+      "custo": 8.0,
+      "evento": {
+        "descricao": "A maldição dos reis caídos atinge-te no caminho para a Antecâmara, causando-te dano grave.",
+        "efeito": "DAMAGE"
+      }
+    },
+    {
+      "origem": "SalaEnigmaFinal",
+      "destino": "SalaEnigmaAvancada",
+      "custo": 4.0
+    },
+    {
+      "origem": "SalaEnigmaAvancada",
+      "destino": "AnteCamara",
+      "custo": 5.0,
+      "evento": {
+        "descricao": "Dominar conhecimento tão avançado remove uma maldição no caminho, restaurando tua vitalidade.",
+        "efeito": "HEAL"
+      }
+    },
+    {
+      "origem": "AnteCamara",
+      "destino": "SalaTesouro",
+      "custo": 10.0,
+      "evento": {
+        "descricao": "A energia da vitória flui em ti enquanto te aproximas, dando-te um aumento de poder.",
+        "efeito": "BONUS_POWER"
+      }
+    }
+  ]
+}

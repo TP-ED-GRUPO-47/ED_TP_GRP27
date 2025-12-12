@@ -3,6 +3,7 @@ package structures.graph;
 /**
  * NetworkADT defines the interface to a network.
  *
+ * @param <T> element type stored as vertices
  */
 public interface NetworkADT<T> extends GraphADT<T>
 {

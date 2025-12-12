@@ -1,10 +1,24 @@
 package model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the {@link Player} class.
+ * <p>
+ * Tests player attributes like power, turn skipping, and movement history.
+ * </p>
+ *
+ * @author Group 27
+ * @version 2025/2026
+ */
 class PlayerTest {
 
+    /**
+     * Tests that player power updates correctly, including negative values.
+     */
     @Test
     void testPowerUpdates() {
         Player p = new Player("Hero");
@@ -14,12 +28,15 @@ class PlayerTest {
         assertEquals(80, p.getPower());
 
         p.updatePower(50);
-        assertEquals(130, p.getPower()); // Acumula
+        assertEquals(130, p.getPower());
 
         p.updatePower(-200);
         assertEquals(0, p.getPower(), "Power não deve ser negativo");
     }
 
+    /**
+     * Tests the skip turn mechanism for players.
+     */
     @Test
     void testSkipTurn() {
         Player p = new Player("Stunned");
@@ -29,6 +46,9 @@ class PlayerTest {
         assertTrue(p.skipsTurn());
     }
 
+    /**
+     * Tests that player movement history is correctly tracked.
+     */
     @Test
     void testHistory() {
         Player p = new Player("Traveler");

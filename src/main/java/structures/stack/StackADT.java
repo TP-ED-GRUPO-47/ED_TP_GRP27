@@ -1,6 +1,11 @@
 package structures.stack;
 
-
+/**
+ * Defines the interface for a stack data structure (LIFO).
+ * Provides operations for pushing, popping, and examining elements.
+ *
+ * @param <T> the type of elements stored in this stack
+ */
 public interface StackADT<T> {
 
     /** Adds one element to the top of this stack.

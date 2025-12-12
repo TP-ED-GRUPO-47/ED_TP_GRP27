@@ -1,0 +1,140 @@
+{
+  "nome": "O Castelo Abandonado de Aldoria",
+  "salas": [
+    {
+      "id": "PortaoPrincipal",
+      "tipo": "ENTRADA",
+      "descricao": "O portão de ferro range. A aventura começa aqui."
+    },
+    {
+      "id": "PatioExterno",
+      "tipo": "NORMAL",
+      "descricao": "Um pátio coberto de ervas daninhas, vestígios de uma batalha antiga."
+    },
+    {
+      "id": "TorreOeste",
+      "tipo": "ALAVANCA",
+      "descricao": "A Torre Oeste. As engrenagens controlam uma ponte levadiça interna."
+    },
+    {
+      "id": "SalaoNobreza",
+      "tipo": "ENIGMA",
+      "descricao": "O Salão. Retratos antigos observam-te. Escondem um segredo?"
+    },
+    {
+      "id": "Masmorra",
+      "tipo": "NORMAL",
+      "descricao": "As celas escuras. O ar é denso com tristeza."
+    },
+    {
+      "id": "TorreLeste",
+      "tipo": "ALAVANCA",
+      "descricao": "A Torre Leste. É necessário reajustar um contrapeso de bronze."
+    },
+    {
+      "id": "BibliotecaReal",
+      "tipo": "ENIGMA",
+      "descricao": "A Biblioteca Real. Livros e pergaminhos estão espalhados pelo chão."
+    },
+    {
+      "id": "SalaMisticaIntermedia",
+      "tipo": "ENIGMA",
+      "descricao": "Sala Mística Intermediária - Conhecimento ancestral aguarda."
+    },
+    {
+      "id": "CameraConselho",
+      "tipo": "NORMAL",
+      "descricao": "A Câmara onde os conselheiros se reuniam. O chão tem um mapa estelar."
+    },
+    {
+      "id": "SalaCoroa",
+      "tipo": "TESOURO",
+      "descricao": "A Sala da Coroa Perdida! O objetivo final está alcançado!"
+    }
+  ],
+  "ligacoes": [
+    {
+      "origem": "PortaoPrincipal",
+      "destino": "PatioExterno",
+      "custo": 1.0
+    },
+    {
+      "origem": "PatioExterno",
+      "destino": "TorreOeste",
+      "custo": 3.0,
+      "evento": {
+        "descricao": "Um obstáculo inesperado ou detritos bloqueiam o caminho para a Torre Oeste. Perdes a próxima jogada.",
+        "efeito": "SKIP_TURN"
+      }
+    },
+    {
+      "origem": "PatioExterno",
+      "destino": "Masmorra",
+      "custo": 2.0,
+      "evento": {
+        "descricao": "Um fantasma de cavaleiro ataca-te ao passar pelas escadas da masmorra, causando-te dano.",
+        "efeito": "DAMAGE"
+      }
+    },
+    {
+      "origem": "TorreOeste",
+      "destino": "SalaoNobreza",
+      "custo": 2.0
+    },
+    {
+      "origem": "Masmorra",
+      "destino": "TorreLeste",
+      "custo": 4.0,
+      "evento": {
+        "descricao": "Encontraste Ervas Medicinais abandonadas numa cela, que restauram a tua vitalidade.",
+        "efeito": "HEAL"
+      }
+    },
+    {
+      "origem": "SalaoNobreza",
+      "destino": "BibliotecaReal",
+      "custo": 3.0,
+      "evento": {
+        "descricao": "Um espelho mágico no salão ativa um teletransporte, trocando-te de posição com outro jogador.",
+        "efeito": "SWAP_POSITION"
+      }
+    },
+    {
+      "origem": "TorreLeste",
+      "destino": "BibliotecaReal",
+      "custo": 2.0
+    },
+    {
+      "origem": "BibliotecaReal",
+      "destino": "SalaMisticaIntermedia",
+      "custo": 3.5
+    },
+    {
+      "origem": "SalaMisticaIntermedia",
+      "destino": "CameraConselho",
+      "custo": 4.0,
+      "evento": {
+        "descricao": "Um mapa estelar na Biblioteca revela um atalho secreto, dando-te uma jogada extra.",
+        "efeito": "EXTRA_TURN"
+      }
+    },
+    {
+      "origem": "SalaoNobreza",
+      "destino": "CameraConselho",
+      "custo": 5.0,
+      "evento": {
+        "descricao": "Um vórtice temporal na passagem confunde todos, forçando a troca de posição de todos os jogadores.",
+        "efeito": "SWAP_ALL"
+      }
+    },
+    {
+      "origem": "CameraConselho",
+      "destino": "SalaCoroa",
+      "custo": 6.0,
+      "evento": {
+        "descricao": "A última armadilha mágica do conselho protege a entrada para a Sala da Coroa, causando-te dano.",
+        "efeito": "TRAP"
+      }
+    }
+  ]
+}

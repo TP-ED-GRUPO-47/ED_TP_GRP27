@@ -59,11 +59,11 @@ public class RiddleRoom extends Room {
      */
     @Override
     public void onEnter() {
-        System.out.println(">> [ENIGMA] " + getDescription());
+        System.out.println("\nEnigma: " + getDescription());
         if (isSolved) {
             System.out.println("O guardião deixa-te passar.");
         } else {
-            System.out.println("Tens de responder para passar!");
+            System.out.println("Tens de responder para passar!\n");
         }
     }
 }

@@ -1,6 +1,11 @@
 package structures.linear;
 
-
+/**
+ * Defines the interface for an unordered list that extends ListADT.
+ * Provides additional operations for inserting elements at specific positions.
+ *
+ * @param <T> the type of elements stored in this list
+ */
 public interface UnorderedListADT<T> extends ListADT<T> {
 
     /** Adds the specified element to the front of this list.

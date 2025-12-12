@@ -1,13 +1,23 @@
 package ui;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
 
+/**
+ * Unit tests for the {@link MapEditor} class.
+ * <p>
+ * Tests map creation and saving functionality.
+ * </p>
+ *
+ * @author Group 27
+ * @version 2025/2026
+ */
 class MapEditorTest {
 
     private final InputStream systemIn = System.in;
@@ -21,15 +31,23 @@ class MapEditorTest {
 
     @Test
     void testMapEditorFlow() {
-
-
         String input =
-                "1\nE1\nENTRADA\nEntry\n" +
-                        "1\nC1\nTESOURO\nCenter\n" +
-                        "2\nE1\nC1\n5,0\n" +
-                        "3\n" +
-                        "4\ntest_save_map\n" +
-                        "5\n";
+                "1\n" +
+                "E1\n" +
+                "ENTRADA\n" +
+                "Entry\n" +
+                "1\n" +
+                "C1\n" +
+                "TESOURO\n" +
+                "Center\n" +
+                "2\n" +
+                "E1\n" +
+                "C1\n" +
+                "5.0\n" +
+                "3\n" +
+                "4\n" +
+                "test_save_map\n" +
+                "0\n";
 
         System.setIn(new ByteArrayInputStream(input.getBytes()));
 

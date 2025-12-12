@@ -6,20 +6,63 @@ import structures.stack.LinkedStack;
 
 import java.util.Iterator;
 
+/**
+ * List-based implementation of a weighted directed graph (Network).
+ * <p>
+ * This class implements the {@link NetworkADT} interface using adjacency lists.
+ * Each vertex stores a list of weighted edges to its neighbors, allowing efficient
+ * traversal and weight queries. Supports graph operations like shortest path calculation.
+ * </p>
+ *
+ * @param <T> The type of elements stored as vertices.
+ * @author Group 27
+ * @version 2025/2026
+ */
 public class NetworkList<T> implements NetworkADT<T> {
+    /** Initial capacity for vertices. */
     protected final int DEFAULT_CAPACITY = 10;
+    /** Current number of vertices in the network. */
     protected int numVertices;
+    /** Array holding vertex elements. */
     protected T[] vertices;
 
+    /** Adjacency lists storing weighted edges for each vertex index. */
     protected ArrayUnorderedList<WeightedEdge>[] adjList;
 
+    /**
+     * Lightweight edge container storing neighbor index and weight.
+     */
     protected class WeightedEdge {
-        public int neighborIndex;
-        public double weight;
+        private final int neighborIndex;
+        private final double weight;
 
+        /**
+         * Creates an edge to a neighbor with a given weight.
+         *
+         * @param neighborIndex index of the adjacent vertex
+         * @param weight        cost of the connection
+         */
         public WeightedEdge(int neighborIndex, double weight) {
-            this.neighborIndex = neighborIndex;
-            this.weight = weight;
+        	this.neighborIndex = neighborIndex;
+        	this.weight = weight;
+        }
+
+        /**
+         * Returns the adjacency-list index of the neighbor.
+         *
+         * @return the adjacency-list index of the neighbor
+         */
+        public int getNeighborIndex() {
+            return neighborIndex;
+        }
+
+        /**
+         * Returns the weight associated with this edge.
+         *
+         * @return the weight associated with this edge
+         */
+        public double getWeight() {
+            return weight;
         }
 
         @Override
@@ -28,6 +71,9 @@ public class NetworkList<T> implements NetworkADT<T> {
         }
     }
 
+    /**
+     * Creates an empty network with default capacity.
+     */
     public NetworkList() {
         numVertices = 0;
         this.vertices = (T[]) (new Object[DEFAULT_CAPACITY]);
@@ -93,10 +139,10 @@ public class NetworkList<T> implements NetworkADT<T> {
                 while (it.hasNext()) {
                     WeightedEdge edge = it.next();
 
-                    if (edge.neighborIndex == indexToRemove) {
+                    if (edge.getNeighborIndex() == indexToRemove) {
                         continue;
-                    } else if (edge.neighborIndex > indexToRemove) {
-                        newList.addToRear(new WeightedEdge(edge.neighborIndex - 1, edge.weight));
+                    } else if (edge.getNeighborIndex() > indexToRemove) {
+                        newList.addToRear(new WeightedEdge(edge.getNeighborIndex() - 1, edge.getWeight()));
                     } else {
                         newList.addToRear(edge);
                     }
@@ -107,7 +153,7 @@ public class NetworkList<T> implements NetworkADT<T> {
     }
 
     /**
-     * Remove uma aresta entre dois vértices.
+     * Removes an edge between two vertices.
      */
     @Override
     public void removeEdge(T vertex1, T vertex2) {
@@ -128,7 +174,7 @@ public class NetworkList<T> implements NetworkADT<T> {
         Iterator<WeightedEdge> it = currentList.iterator();
         while (it.hasNext()) {
             WeightedEdge edge = it.next();
-            if (edge.neighborIndex != targetIndex) {
+            if (edge.getNeighborIndex() != targetIndex) {
                 newList.addToRear(edge);
             }
         }
@@ -140,6 +186,12 @@ public class NetworkList<T> implements NetworkADT<T> {
         return iteratorBFS(getIndex(startVertex));
     }
 
+    /**
+     * Returns a breadth-first traversal starting from an index.
+     *
+     * @param startIndex index of the starting vertex
+     * @return iterator over visited vertices in BFS order
+     */
     public Iterator<T> iteratorBFS(int startIndex) {
         Integer x;
         LinkedQueue<Integer> traversalQueue = new LinkedQueue<Integer>();
@@ -160,9 +212,9 @@ public class NetworkList<T> implements NetworkADT<T> {
             Iterator<WeightedEdge> it = adjList[x.intValue()].iterator();
             while (it.hasNext()) {
                 WeightedEdge edge = it.next();
-                if (!visited[edge.neighborIndex]) {
-                    traversalQueue.enqueue(edge.neighborIndex);
-                    visited[edge.neighborIndex] = true;
+                if (!visited[edge.getNeighborIndex()]) {
+                    traversalQueue.enqueue(edge.getNeighborIndex());
+                    visited[edge.getNeighborIndex()] = true;
                 }
             }
         }
@@ -174,6 +226,12 @@ public class NetworkList<T> implements NetworkADT<T> {
         return iteratorDFS(getIndex(startVertex));
     }
 
+    /**
+     * Returns a depth-first traversal starting from an index.
+     *
+     * @param startIndex index of the starting vertex
+     * @return iterator over visited vertices in DFS order
+     */
     public Iterator<T> iteratorDFS(int startIndex) {
         Integer x;
         boolean found;
@@ -196,10 +254,10 @@ public class NetworkList<T> implements NetworkADT<T> {
             Iterator<WeightedEdge> it = adjList[x.intValue()].iterator();
             while (it.hasNext() && !found) {
                 WeightedEdge edge = it.next();
-                if (!visited[edge.neighborIndex]) {
-                    traversalStack.push(edge.neighborIndex);
-                    resultList.addToRear(vertices[edge.neighborIndex]);
-                    visited[edge.neighborIndex] = true;
+                if (!visited[edge.getNeighborIndex()]) {
+                    traversalStack.push(edge.getNeighborIndex());
+                    resultList.addToRear(vertices[edge.getNeighborIndex()]);
+                    visited[edge.getNeighborIndex()] = true;
                     found = true;
                 }
             }
@@ -215,70 +273,138 @@ public class NetworkList<T> implements NetworkADT<T> {
         return iteratorShortestPath(getIndex(startVertex), getIndex(targetVertex));
     }
 
+    /**
+     * Computes shortest path between two indices using Dijkstra's algorithm.
+     *
+     * @param startIndex  source vertex index
+     * @param targetIndex destination vertex index
+     * @return iterator containing the path vertices, or empty if unreachable
+     */
     protected Iterator<T> iteratorShortestPath(int startIndex, int targetIndex) {
-        ArrayUnorderedList<T> resultList = new ArrayUnorderedList<T>();
+        ArrayUnorderedList<T> resultList = new ArrayUnorderedList<>();
         if (!indexIsValid(startIndex) || !indexIsValid(targetIndex))
             return resultList.iterator();
 
-        if (startIndex == targetIndex) {
-            resultList.addToRear(vertices[startIndex]);
-            return resultList.iterator();
-        }
-
-        LinkedQueue<Integer> traversalQueue = new LinkedQueue<Integer>();
+        double[] pathWeight = new double[numVertices];
         boolean[] visited = new boolean[numVertices];
         int[] predecessor = new int[numVertices];
 
         for (int i = 0; i < numVertices; i++) {
+            pathWeight[i] = Double.POSITIVE_INFINITY;
             visited[i] = false;
             predecessor[i] = -1;
         }
 
-        boolean found = false;
-        traversalQueue.enqueue(startIndex);
-        visited[startIndex] = true;
+        pathWeight[startIndex] = 0;
 
-        while (!traversalQueue.isEmpty() && !found) {
-            Integer x = traversalQueue.dequeue();
+        for (int i = 0; i < numVertices; i++) {
+            int u = -1;
+            double minWeight = Double.POSITIVE_INFINITY;
 
-            if (x.intValue() == targetIndex) {
-                found = true;
-                break;
+            for (int j = 0; j < numVertices; j++) {
+                if (!visited[j] && pathWeight[j] < minWeight) {
+                    minWeight = pathWeight[j];
+                    u = j;
+                }
             }
 
-            Iterator<WeightedEdge> it = adjList[x.intValue()].iterator();
+            if (u == -1) break;
+            visited[u] = true;
+
+            if (u == targetIndex) break;
+
+            Iterator<WeightedEdge> it = adjList[u].iterator();
             while (it.hasNext()) {
                 WeightedEdge edge = it.next();
+                int v = edge.getNeighborIndex();
+                double weight = edge.getWeight();
 
-                if (!visited[edge.neighborIndex]) {
-                    visited[edge.neighborIndex] = true;
-                    predecessor[edge.neighborIndex] = x.intValue();
-                    traversalQueue.enqueue(edge.neighborIndex);
-
-                    if (edge.neighborIndex == targetIndex) {
-                        found = true;
-                        break;
+                if (!visited[v]) {
+                    if (pathWeight[u] + weight < pathWeight[v]) {
+                        pathWeight[v] = pathWeight[u] + weight;
+                        predecessor[v] = u;
                     }
                 }
             }
         }
 
-        if (!found) return resultList.iterator();
+        if (pathWeight[targetIndex] == Double.POSITIVE_INFINITY)
+            return resultList.iterator();
 
-        LinkedStack<Integer> pathStack = new LinkedStack<Integer>();
+        LinkedStack<Integer> pathStack = new LinkedStack<>();
         int current = targetIndex;
-
-        while (current != startIndex && current != -1) {
+        while (current != -1) {
             pathStack.push(current);
             current = predecessor[current];
         }
-        pathStack.push(startIndex);
 
         while (!pathStack.isEmpty()) {
-            resultList.addToRear(vertices[pathStack.pop().intValue()]);
+            resultList.addToRear(vertices[pathStack.pop()]);
         }
 
         return resultList.iterator();
+    }
+
+    /**
+     * Returns a Minimum Spanning Tree (MST) using Prim's algorithm.
+     */
+    /**
+     * Returns a Minimum Spanning Tree (MST) using Prim's algorithm.
+     *
+     * @return new network containing the MST edges
+     */
+    public NetworkList<T> mstNetwork() {
+        NetworkList<T> mst = new NetworkList<>();
+        if (isEmpty()) return mst;
+
+        for (int i = 0; i < numVertices; i++) {
+            mst.addVertex(this.vertices[i]);
+        }
+
+        boolean[] visited = new boolean[numVertices];
+        int[] minEdgeSource = new int[numVertices];
+        double[] minEdgeWeight = new double[numVertices];
+
+        for (int i = 0; i < numVertices; i++) {
+            visited[i] = false;
+            minEdgeWeight[i] = Double.POSITIVE_INFINITY;
+            minEdgeSource[i] = -1;
+        }
+
+        minEdgeWeight[0] = 0;
+
+        for (int i = 0; i < numVertices; i++) {
+            int u = -1;
+            double min = Double.POSITIVE_INFINITY;
+
+            for (int v = 0; v < numVertices; v++) {
+                if (!visited[v] && minEdgeWeight[v] < min) {
+                    min = minEdgeWeight[v];
+                    u = v;
+                }
+            }
+
+            if (u == -1) break;
+            visited[u] = true;
+
+            if (minEdgeSource[u] != -1) {
+                mst.addEdge(vertices[minEdgeSource[u]], vertices[u], minEdgeWeight[u]);
+            }
+
+            Iterator<WeightedEdge> it = adjList[u].iterator();
+            while (it.hasNext()) {
+                WeightedEdge edge = it.next();
+                int v = edge.getNeighborIndex();
+                double weight = edge.getWeight();
+
+                if (!visited[v] && weight < minEdgeWeight[v]) {
+                    minEdgeWeight[v] = weight;
+                    minEdgeSource[v] = u;
+                }
+            }
+        }
+
+        return mst;
     }
 
 
@@ -320,8 +446,8 @@ public class NetworkList<T> implements NetworkADT<T> {
             Iterator<WeightedEdge> it = adjList[u].iterator();
             while (it.hasNext()) {
                 WeightedEdge edge = it.next();
-                int v = edge.neighborIndex;
-                double weight = edge.weight;
+                int v = edge.getNeighborIndex();
+                double weight = edge.getWeight();
 
                 if (!visited[v]) {
                     if (pathWeight[u] + weight < pathWeight[v]) {
@@ -335,10 +461,22 @@ public class NetworkList<T> implements NetworkADT<T> {
     }
 
 
+    /**
+     * Checks if a vertex index is within bounds.
+     *
+     * @param index index to validate
+     * @return true when the index refers to an existing vertex
+     */
     protected boolean indexIsValid(int index) {
         return ((index < numVertices) && (index >= 0));
     }
 
+    /**
+     * Returns the internal index for a vertex element.
+     *
+     * @param vertex vertex element to locate
+     * @return index of the vertex or -1 if not found
+     */
     protected int getIndex(T vertex) {
         for (int i = 0; i < numVertices; i++)
             if (vertices[i].equals(vertex))
@@ -346,6 +484,9 @@ public class NetworkList<T> implements NetworkADT<T> {
         return -1;
     }
 
+    /**
+     * Doubles storage for vertices and adjacency lists.
+     */
     protected void expandCapacity() {
         T[] largerVertices = (T[]) (new Object[vertices.length * 2]);
         ArrayUnorderedList<WeightedEdge>[] largerAdjList = new ArrayUnorderedList[vertices.length * 2];
@@ -390,11 +531,11 @@ public class NetworkList<T> implements NetworkADT<T> {
     }
 
     /**
-     * Retorna um iterador com os vértices adjacentes a um dado vértice.
-     * Este método é genérico e serve para qualquer aplicação do grafo.
+     * Returns an iterator with the vertices adjacent to a given vertex.
+     * This method is generic and serves any application of the graph.
      *
-     * @param vertex O vértice do qual queremos os vizinhos.
-     * @return Iterador com os vizinhos.
+     * @param vertex The vertex whose neighbors we want.
+     * @return Iterator with the neighbors.
      */
     public Iterator<T> getNeighbors(T vertex) {
         int index = getIndex(vertex);

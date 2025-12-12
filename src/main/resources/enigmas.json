@@ -1,7 +1,7 @@
 {
   "enigmas": [
     {
-      "pergunta": "Qual é a complexidade temporal média de pesquisa numa Árvore Binária de Pesquisa balanceada?",
+      "pergunta": "Qual é a complexidade temporal média de pesquisa numa Árvore Binária de Pesquisa (BST)?",
       "opcoes": [
         "O(1)",
         "O(n)",
@@ -11,42 +11,142 @@
       "correta": 2
     },
     {
-      "pergunta": "Qual destas estruturas segue o princípio LIFO (Last In, First Out)?",
+      "pergunta": "Qual destas estruturas de dados segue o princípio LIFO (Last In, First Out)?",
       "opcoes": [
         "Queue (Fila)",
         "Stack (Pilha)",
         "LinkedList (Lista Ligada)",
-        "Graph (Grafo)"
+        "Hash Table (Tabela de Dispersão)"
       ],
       "correta": 1
     },
     {
-      "pergunta": "Numa Lista Duplamente Ligada, cada nó tem referências para...",
+      "pergunta": "Numa Lista Duplamente Ligada, cada nó deve ter referências para que elementos?",
       "opcoes": [
-        "Apenas o próximo nó",
-        "O nó anterior e o próximo nó",
+        "Apenas o nó seguinte",
+        "O nó anterior e o nó seguinte",
         "Apenas o nó anterior",
-        "A raiz da lista"
+        "O primeiro e o último nó"
       ],
       "correta": 1
     },
     {
-      "pergunta": "Qual destas NÃO é uma estrutura de dados linear?",
+      "pergunta": "Qual destas estruturas de dados é classificada como NÃO linear?",
       "opcoes": [
-        "Array",
-        "Queue",
-        "Stack",
-        "Binary Tree"
+        "Array (Vetor)",
+        "Queue (Fila)",
+        "Stack (Pilha)",
+        "Binary Tree (Árvore Binária)"
       ],
       "correta": 3
     },
     {
-      "pergunta": "Num Grafo, como se chamam as ligações entre os vértices?",
+      "pergunta": "Em teoria de Grafos, como são denominadas as ligações entre os vértices (nós)?",
       "opcoes": [
-        "Pontes",
+        "Pontos",
         "Nós",
         "Arestas (Edges)",
-        "Folhas"
+        "Faces"
+      ],
+      "correta": 2
+    },
+    {
+      "pergunta": "Qual é o nome do algoritmo de ordenação que divide a lista em metades, ordena-as recursivamente e depois as combina?",
+      "opcoes": [
+        "Bubble Sort (Ordenação por Bolha)",
+        "Insertion Sort (Ordenação por Inserção)",
+        "Quick Sort (Ordenação Rápida)",
+        "Merge Sort (Ordenação por Mistura)"
+      ],
+      "correta": 3
+    },
+    {
+      "pergunta": "Qual é a complexidade temporal no pior caso para um algoritmo de pesquisa linear num array de tamanho 'n'?",
+      "opcoes": [
+        "O(1)",
+        "O(log n)",
+        "O(n)",
+        "O(n^2)"
+      ],
+      "correta": 2
+    },
+    {
+      "pergunta": "Qual o princípio que uma Queue (Fila) segue?",
+      "opcoes": [
+        "LIFO (Last In, First Out)",
+        "FIFO (First In, First Out)",
+        "Random Access (Acesso Aleatório)",
+        "Priority Access (Acesso por Prioridade)"
+      ],
+      "correta": 1
+    },
+    {
+      "pergunta": "Numa Tabela de Dispersão (Hash Table), o que é usado para converter a chave num índice de array?",
+      "opcoes": [
+        "Função de Compressão",
+        "Função de Ligação",
+        "Função de Dispersão (Hash Function)",
+        "Função de Criptografia"
+      ],
+      "correta": 2
+    },
+    {
+      "pergunta": "O que é 'Polimorfismo' em Programação Orientada a Objetos (POO)?",
+      "opcoes": [
+        "A capacidade de ocultar detalhes de implementação.",
+        "A capacidade de uma classe herdar propriedades de outra.",
+        "O conceito de criar uma instância de uma classe.",
+        "A capacidade de um objeto assumir várias formas (comportamentos diferentes)."
+      ],
+      "correta": 3
+    },
+    {
+      "pergunta": "Qual o método que garante que um objeto só pode ser instanciado uma única vez na aplicação (padrão de projeto)?",
+      "opcoes": [
+        "Factory (Fábrica)",
+        "Observer (Observador)",
+        "Singleton (Instância Única)",
+        "Strategy (Estratégia)"
+      ],
+      "correta": 2
+    },
+    {
+      "pergunta": "Em redes, o que significa a sigla 'HTTP'?",
+      "opcoes": [
+        "Hypertext Transfer Protocol",
+        "High-Level Text Transmission Protocol",
+        "Host Translation Telecommunication Protocol",
+        "Hyperlink Tagging and Transmission Protocol"
+      ],
+      "correta": 0
+    },
+    {
+      "pergunta": "Numa base de dados, qual o termo para a restrição que garante que cada linha numa tabela tem um valor único (identificador)?",
+      "opcoes": [
+        "Foreign Key (Chave Estrangeira)",
+        "Index (Índice)",
+        "Primary Key (Chave Primária)",
+        "Unique Constraint (Restrição Única)"
+      ],
+      "correta": 2
+    },
+    {
+      "pergunta": "Qual é o principal problema que o 'Garbage Collector' (Coletor de Lixo) tenta resolver em linguagens de programação como Java ou C#?",
+      "opcoes": [
+        "Erros de Sintaxe",
+        "Gestão de Memória",
+        "Otimização de Código",
+        "Erros de Tempo de Compilação"
+      ],
+      "correta": 1
+    },
+    {
+      "pergunta": "No contexto de Git (controlo de versão), o que representa um 'commit'?",
+      "opcoes": [
+        "Uma nova branch (ramo) do projeto.",
+        "Uma cópia de segurança completa do repositório.",
+        "Um ponto no tempo no histórico do projeto, com um conjunto de alterações.",
+        "A fusão (merge) de duas branches."
       ],
       "correta": 2
     }

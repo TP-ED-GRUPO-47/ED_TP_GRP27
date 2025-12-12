@@ -1,10 +1,24 @@
 package model;
 
+import java.util.Iterator;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.util.Iterator;
-import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the {@link Maze} class.
+ * <p>
+ * Tests maze structure including rooms, corridors, and connectivity.
+ * </p>
+ *
+ * @author Group 27
+ * @version 2025/2026
+ */
 class MazeTest {
 
     private Maze maze;
@@ -14,6 +28,9 @@ class MazeTest {
         maze = new Maze();
     }
 
+    /**
+     * Tests adding rooms and corridors to the maze.
+     */
     @Test
     void testAddRoomAndCorridor() {
         Room r1 = new RoomStandard("A", "A");
@@ -33,6 +50,9 @@ class MazeTest {
         assertEquals(r2, neighbors.next());
     }
 
+    /**
+     * Tests retrieval of entrance and treasure rooms.
+     */
     @Test
     void testGetEntranceAndTreasure() {
         assertNull(maze.getEntrance());
@@ -48,6 +68,9 @@ class MazeTest {
         assertEquals(c, maze.getTreasureRoom());
     }
 
+    /**
+     * Tests creation of secret passages in the maze.
+     */
     @Test
     void testSecretPassage() {
         Room r1 = new RoomStandard("A", "A");

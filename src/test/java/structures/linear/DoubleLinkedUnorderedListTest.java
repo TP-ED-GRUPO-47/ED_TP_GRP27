@@ -1,12 +1,25 @@
 package structures.linear;
 
+import java.util.Iterator;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import exceptions.NoSuchElementException;
 
+/**
+ * Unit tests for the {@link DoubleLinkedUnorderedList} class.
+ * <p>
+ * Tests doubly-linked list operations with bidirectional navigation.
+ * </p>
+ *
+ * @author Group 27
+ * @version 2025/2026
+ */
 class DoubleLinkedUnorderedListTest {
 
     private DoubleLinkedUnorderedList<String> list;
@@ -16,6 +29,9 @@ class DoubleLinkedUnorderedListTest {
         list = new DoubleLinkedUnorderedList<>();
     }
 
+    /**
+     * Tests adding elements to the front of the list.
+     */
     @Test
     void testAddToFront() {
         assertTrue(list.isEmpty());
@@ -30,6 +46,9 @@ class DoubleLinkedUnorderedListTest {
         assertEquals("A", list.last());
     }
 
+    /**
+     * Tests adding elements to the rear of the list.
+     */
     @Test
     void testAddToRear() {
         list.addToRear("A");
@@ -41,6 +60,9 @@ class DoubleLinkedUnorderedListTest {
         assertEquals(2, list.size());
     }
 
+    /**
+     * Tests inserting elements after a specific target element.
+     */
     @Test
     void testAddAfter() {
         list.addToRear("A");
@@ -59,6 +81,9 @@ class DoubleLinkedUnorderedListTest {
         assertEquals(4, list.size());
     }
 
+    /**
+     * Tests that addAfter throws exceptions for invalid operations.
+     */
     @Test
     void testAddAfterExceptions() {
         assertThrows(NoSuchElementException.class, () -> list.addAfter("A", "B"), "Lista vazia deve lançar erro");
@@ -67,6 +92,9 @@ class DoubleLinkedUnorderedListTest {
         assertThrows(NoSuchElementException.class, () -> list.addAfter("C", "B"), "Target inexistente deve lançar erro");
     }
 
+    /**
+     * Tests removing the first element from the list.
+     */
     @Test
     void testRemoveFirst() {
         assertThrows(NoSuchElementException.class, () -> list.removeFirst());
@@ -82,6 +110,9 @@ class DoubleLinkedUnorderedListTest {
         assertTrue(list.isEmpty());
     }
 
+    /**
+     * Tests removing the last element from the list.
+     */
     @Test
     void testRemoveLast() {
         assertThrows(NoSuchElementException.class, () -> list.removeLast());
@@ -97,6 +128,9 @@ class DoubleLinkedUnorderedListTest {
         assertTrue(list.isEmpty());
     }
 
+    /**
+     * Tests removing a specific element from the list.
+     */
     @Test
     void testRemoveElement() {
         assertThrows(NoSuchElementException.class, () -> list.remove("A"));
@@ -116,12 +150,18 @@ class DoubleLinkedUnorderedListTest {
         assertTrue(list.isEmpty());
     }
 
+    /**
+     * Tests that removing a non-existent element throws an exception.
+     */
     @Test
     void testRemoveElementNotFound() {
         list.addToFront("A");
         assertThrows(NoSuchElementException.class, () -> list.remove("Z"));
     }
 
+    /**
+     * Tests the contains method for checking element existence.
+     */
     @Test
     void testContains() {
         list.addToRear("A");
@@ -129,6 +169,9 @@ class DoubleLinkedUnorderedListTest {
         assertFalse(list.contains("B"));
     }
 
+    /**
+     * Tests iterator functionality for list traversal.
+     */
     @Test
     void testIterator() {
         list.addToRear("1");
@@ -143,6 +186,9 @@ class DoubleLinkedUnorderedListTest {
         assertThrows(NoSuchElementException.class, () -> it.next());
     }
 
+    /**
+     * Tests string representation of the list.
+     */
     @Test
     void testToString() {
         list.addToRear("A");
@@ -150,6 +196,9 @@ class DoubleLinkedUnorderedListTest {
         assertEquals("[A, B]", list.toString());
     }
 
+    /**
+     * Tests that accessing first/last on empty list throws exceptions.
+     */
     @Test
     void testFirstLastExceptions() {
         assertThrows(NoSuchElementException.class, () -> list.first());

@@ -69,10 +69,12 @@ public class Corridor {
      * <p>
      * This method is typically called by the game engine when a player moves through this corridor.
      * </p>
+     *
+     * @param player the player traversing the corridor
      */
-    public void triggerEvent() {
+    public void triggerEvent(Player player) {
         if (event != null) {
-            event.trigger();
+            event.trigger(player);
         }
     }
 

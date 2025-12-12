@@ -1,10 +1,23 @@
 package structures.linear;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the {@link DoubleNode} class.
+ * <p>
+ * Tests node operations for doubly-linked structures with forward and backward pointers.
+ * </p>
+ *
+ * @author Group 27
+ * @version 2025/2026
+ */
 class DoubleNodeTest {
 
+    /**
+     * Tests doubly-linked node operations including element storage, next, and previous pointers.
+     */
     @Test
     void testNodeOperations() {
         DoubleNode<String> node1 = new DoubleNode<>("A");

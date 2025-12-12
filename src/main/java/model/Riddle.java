@@ -1,7 +1,6 @@
 package model;
 
 import structures.linear.ArrayUnorderedList;
-import java.util.Iterator;
 
 /**
  * Represents a riddle or logic puzzle in the game.
@@ -20,7 +19,7 @@ import java.util.Iterator;
 public class Riddle {
     private String question;
     private ArrayUnorderedList<String> options;
-    private int correctAnswerIndex; // 0 to N
+    private int correctAnswerIndex;
 
     /**
      * Constructs a new Riddle.

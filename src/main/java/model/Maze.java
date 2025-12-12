@@ -1,6 +1,7 @@
 package model;
 
 import java.util.Iterator;
+
 import structures.graph.NetworkList;
 import structures.linear.ArrayUnorderedList;
 
@@ -38,6 +39,12 @@ public class Maze {
     private ArrayUnorderedList<Room> allRooms;
 
     /**
+     * Tracks which lever rooms have been activated globally.
+     * Used to apply unlock effects to all players.
+     */
+    private ArrayUnorderedList<String> activatedLevers;
+
+    /**
      * Constructs a new, empty Maze.
      * Initializes the graph and auxiliary lists.
      */
@@ -45,6 +52,7 @@ public class Maze {
         this.map = new NetworkList<>();
         this.allCorridors = new ArrayUnorderedList<>();
         this.allRooms = new ArrayUnorderedList<>();
+        this.activatedLevers = new ArrayUnorderedList<>();
     }
 
     /**
@@ -58,7 +66,7 @@ public class Maze {
     public void addRoom(Room room) {
         if (room != null) {
             this.map.addVertex(room);
-            this.allRooms.addToRear(room); // Add to auxiliary list for lookup
+            this.allRooms.addToRear(room);
         }
     }
 
@@ -76,7 +84,7 @@ public class Maze {
 
         if (from == null || to == null) {
             System.err.println(
-                    "ERRO: Sala não encontrada para corredor " + fromId + " -> " + toId);
+                    "Sala não encontrada para corredor " + fromId + " -> " + toId);
             return;
         }
 
@@ -132,8 +140,10 @@ public class Maze {
      * @param id The identifier of the room.
      * @return The Room object, or null if not found.
      */
-    private Room findRoomById(String id) {
-        if (id == null) return null;
+    public Room getRoomById(String id) {
+        if (id == null){
+            return null;
+        }
 
         Iterator<Room> it = allRooms.iterator();
         while (it.hasNext()) {
@@ -143,6 +153,13 @@ public class Maze {
             }
         }
         return null;
+    }
+
+    /**
+     * Private alias for internal use (backwards compat).
+     */
+    private Room findRoomById(String id) {
+        return getRoomById(id);
     }
 
     /**
@@ -156,7 +173,9 @@ public class Maze {
      * @return The ID of the target room, or null if creation fails.
      */
     public String createSecretPassage(Room fromRoom) {
-        if (map.size() < 2) return null;
+        if (map.size() < 2){
+            return null;
+        }
 
         ArrayUnorderedList<Room> candidates = new ArrayUnorderedList<>();
         Iterator<Room> it = allRooms.iterator();
@@ -168,7 +187,9 @@ public class Maze {
             }
         }
 
-        if (candidates.isEmpty()) return null;
+        if (candidates.isEmpty()){
+            return null;
+        } 
 
         java.util.Random rnd = new java.util.Random();
         int randomIndex = rnd.nextInt(candidates.size());
@@ -213,7 +234,9 @@ public class Maze {
      * @return The Entrance room, or null if none exists.
      */
     public Room getEntrance() {
-        if (map.isEmpty()) return null;
+        if (map.isEmpty()){
+            return null;
+        }
 
         Iterator<Room> it = allRooms.iterator();
         while (it.hasNext()) {
@@ -226,13 +249,33 @@ public class Maze {
     }
 
     /**
+     * Retrieves all entrance rooms in the maze.
+     * Supports multiple starting positions for players.
+     *
+     * @return An ArrayUnorderedList containing all Entrance rooms.
+     */
+    public ArrayUnorderedList<Room> getAllEntrances() {
+        ArrayUnorderedList<Room> entrances = new ArrayUnorderedList<>();
+        Iterator<Room> it = allRooms.iterator();
+        while (it.hasNext()) {
+            Room r = it.next();
+            if (r instanceof Entrance) {
+                entrances.addToRear(r);
+            }
+        }
+        return entrances;
+    }
+
+    /**
      * Finds the Treasure room (Center) of the maze.
      * Useful for Bots to determine their target.
      *
      * @return The Center room, or null if none exists.
      */
     public Room getTreasureRoom() {
-        if (map.isEmpty()) return null;
+        if (map.isEmpty()){
+            return null;
+        }
 
         Iterator<Room> it = allRooms.iterator();
         while (it.hasNext()) {
@@ -251,12 +294,16 @@ public class Maze {
      * @return A string listing neighbor IDs (in Portuguese).
      */
     public String getAvailableExits(Room currentRoom) {
-        if (currentRoom == null) return "Nenhuma";
+        if (currentRoom == null){
+            return "Nenhuma";
+        }
 
         Iterator<Room> it = getNeighbors(currentRoom);
         StringBuilder sb = new StringBuilder();
 
-        if (!it.hasNext()) return "Sem saídas (Beco sem saída)";
+        if (!it.hasNext()){
+            return "Sem saídas (Beco sem saída)";
+        } 
 
         while (it.hasNext()) {
             Room neighbor = it.next();
@@ -266,8 +313,99 @@ public class Maze {
         return sb.toString();
     }
 
+    /**
+     * Marks a lever room as globally activated.
+     * <p>
+     * Once a lever is activated, its effect is available to all players.
+     * </p>
+     *
+     * @param leverId The ID of the lever room.
+     */
+    public void activateLever(String leverId) {
+        Iterator<String> it = activatedLevers.iterator();
+        while (it.hasNext()) {
+            if (it.next().equals(leverId)) {
+                return;
+            }
+        }
+        activatedLevers.addToRear(leverId);
+    }
+
+    /**
+     * Checks if a lever has been activated.
+     *
+     * @param leverId The ID of the lever room.
+     * @return true if activated, false otherwise.
+     */
+    public boolean isLeverActivated(String leverId) {
+        Iterator<String> it = activatedLevers.iterator();
+        while (it.hasNext()) {
+            if (it.next().equals(leverId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Returns all activated lever IDs.
+     *
+     * @return Iterator of activated lever IDs.
+     */
+    public Iterator<String> getActivatedLevers() {
+        return activatedLevers.iterator();
+    }
+
+    /**
+     * Returns all corridor IDs.
+     *
+     * @return Iterator of all corridors.
+     */
+    public Iterator<Corridor> getAllCorridors() {
+        return allCorridors.iterator();
+    }
+
+    /**
+     * Returns all rooms in the maze.
+     *
+     * @return Iterator of all rooms.
+     */
+    public Iterator<Room> getAllRooms() {
+        return allRooms.iterator();
+    }
+
+    /**
+     * Validates graph connectivity with detailed error reporting.
+     * Ensures all rooms are reachable from the entrance.
+     *
+     * @return true if all rooms are connected, false otherwise.
+     */
     public boolean isConnected() {
-        return map.isConnected();
+        if (map.isEmpty()) {
+            System.err.println("Mapa vazio ou inexistente, nenhuma sala definida.");
+            return false;
+        }
+
+        if (getEntrance() == null) {
+            System.err.println("Nenhuma entrada encontrada no mapa.");
+            return false;
+        }
+
+        boolean connected = map.isConnected();
+
+        if (!connected) {
+            System.err.println("Salas inalcançáveis detectadas!");
+            System.err.println("  - Total de salas: " + allRooms.size());
+            Iterator<Room> it = map.iteratorBFS(0);
+            int reachable = 0;
+            while (it.hasNext()) {
+                it.next();
+                reachable++;
+            }
+            System.err.println("  - Salas alcançáveis: " + reachable);
+        }
+
+        return connected;
     }
 
     /**

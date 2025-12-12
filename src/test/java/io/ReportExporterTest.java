@@ -1,14 +1,25 @@
 package io;
 
+import java.io.File;
+
+import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
+
 import model.Center;
 import model.Player;
 import model.RoomStandard;
-import io.ReportExporter;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
-import java.io.File;
-import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the {@link ReportExporter} class.
+ * <p>
+ * Tests the generation of game reports in JSON format.
+ * </p>
+ *
+ * @author Group 27
+ * @version 2025/2026
+ */
 class ReportExporterTest {
 
     private String generatedFileName;
@@ -23,6 +34,9 @@ class ReportExporterTest {
         }
     }
 
+    /**
+     * Tests exporting a victory report when player reaches the treasure.
+     */
     @Test
     void testExportVictoryReport() {
         Player p = new Player("WinnerBot");
@@ -38,6 +52,9 @@ class ReportExporterTest {
         assertTrue(file.length() > 0, "Report file should not be empty");
     }
 
+    /**
+     * Tests exporting a defeat report when player doesn't reach the treasure.
+     */
     @Test
     void testExportDefeatReport() {
         Player p = new Player("LoserBot");
@@ -52,6 +69,9 @@ class ReportExporterTest {
         assertTrue(file.exists(), "Defeat report file should be created");
     }
 
+    /**
+     * Tests that player names with spaces are handled correctly in filenames.
+     */
     @Test
     void testExportWithSpacesInName() {
         Player p = new Player("Bot With Spaces");

@@ -5,6 +5,7 @@ import java.util.Iterator;
 /**
  * GraphADT defines the interface to a graph data structure.
  *
+ * @param <T> element type stored as vertices
  */
 public interface GraphADT<T>
 {
@@ -40,7 +41,7 @@ public interface GraphADT<T>
      * @return a breadth first iterator beginning at
      * the given vertex
      */
-    public Iterator iteratorBFS(T startVertex);
+    public Iterator<T> iteratorBFS(T startVertex);
     /**
      * Returns a depth first iterator starting with the given vertex.
      *
@@ -48,7 +49,7 @@ public interface GraphADT<T>
      * @return a depth first iterator starting at the
      * given vertex
      */
-    public Iterator iteratorDFS(T startVertex);
+    public Iterator<T> iteratorDFS(T startVertex);
     /**
      * Returns an iterator that contains the shortest path between
      * the two vertices.
@@ -58,7 +59,7 @@ public interface GraphADT<T>
      * @return an iterator that contains the shortest
      * path between the two vertices
      */
-    public Iterator iteratorShortestPath(T startVertex, T targetVertex);
+    public Iterator<T> iteratorShortestPath(T startVertex, T targetVertex);
     /**
      * Returns true if this graph is empty, false otherwise.
      *

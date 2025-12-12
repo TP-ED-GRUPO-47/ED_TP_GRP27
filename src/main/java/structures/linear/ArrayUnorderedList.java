@@ -1,15 +1,34 @@
 package structures.linear;
 
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
+import exceptions.NoSuchElementException;
 
+/**
+ * Array-based implementation of an unordered list.
+ * <p>
+ * This class implements the {@link UnorderedListADT} interface using a dynamic array
+ * that automatically expands when capacity is exceeded. Elements can be added to the front,
+ * rear, or after a specific element. Removal operations are also supported.
+ * </p>
+ * <p>
+ * The array grows by doubling its capacity when needed, ensuring amortized O(1) insertion
+ * and removal operations (except when shifting is required).
+ * </p>
+ *
+ * @param <T> The type of elements stored in the list.
+ * @author Group 27
+ * @version 2025/2026
+ */
 public class ArrayUnorderedList<T> implements UnorderedListADT<T> {
 
     private final int DEFAULT_CAPACITY = 10;
     private T[] list;
     private int rear;
 
+    /**
+     * Creates an empty list with the default initial capacity.
+     */
     public ArrayUnorderedList() {
         list = (T[]) new Object[DEFAULT_CAPACITY];
         rear = 0;

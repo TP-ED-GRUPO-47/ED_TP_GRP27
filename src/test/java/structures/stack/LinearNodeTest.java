@@ -1,10 +1,24 @@
 package structures.stack;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the {@link LinearNode} class.
+ * <p>
+ * Tests node operations for singly-linked structures.
+ * </p>
+ *
+ * @author Group 27
+ * @version 2025/2026
+ */
 class LinearNodeTest {
 
+    /**
+     * Tests basic node operations including element storage and next pointer management.
+     */
     @Test
     void testNodeOperations() {
         LinearNode<Integer> node1 = new LinearNode<>(10);

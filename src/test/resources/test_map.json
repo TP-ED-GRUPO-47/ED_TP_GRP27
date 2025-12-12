@@ -17,6 +17,11 @@
       "descricao": "Sala Enigma"
     },
     {
+      "id": "L1",
+      "tipo": "ALAVANCA",
+      "descricao": "Sala Alavanca"
+    },
+    {
       "id": "C1",
       "tipo": "TESOURO",
       "descricao": "Centro"
@@ -29,13 +34,27 @@
       "custo": 2.0,
       "evento": {
         "descricao": "Teste Evento",
-        "efeito": "HEAL",
-        "item": "Pocao"
+        "efeito": "HEAL"
       }
     },
     {
       "origem": "S1",
       "destino": "R1",
+      "custo": 1.0
+    },
+    {
+      "origem": "S1",
+      "destino": "C1",
+      "custo": 1.0
+    },
+    {
+      "origem": "S1",
+      "destino": "L1",
+      "custo": 1.0
+    },
+    {
+      "origem": "L1",
+      "destino": "C1",
       "custo": 1.0
     }
   ]

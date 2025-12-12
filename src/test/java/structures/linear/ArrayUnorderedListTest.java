@@ -1,12 +1,26 @@
 package structures.linear;
 
+import java.util.Iterator;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import exceptions.NoSuchElementException;
 
+/**
+ * Unit tests for the {@link ArrayUnorderedList} class.
+ * <p>
+ * Tests array-based list operations including add, remove, and iteration.
+ * </p>
+ *
+ * @author Group 27
+ * @version 2025/2026
+ */
 class ArrayUnorderedListTest {
 
     private ArrayUnorderedList<Integer> list;
@@ -16,6 +30,9 @@ class ArrayUnorderedListTest {
         list = new ArrayUnorderedList<>();
     }
 
+    /**
+     * Tests adding elements and automatic capacity expansion.
+     */
     @Test
     void testAddAndExpandCapacity() {
         for (int i = 0; i < 15; i++) {
@@ -26,6 +43,9 @@ class ArrayUnorderedListTest {
         assertEquals(14, list.last());
     }
 
+    /**
+     * Tests adding elements to the front of the list.
+     */
     @Test
     void testAddToFront() {
         list.addToFront(1);
@@ -41,6 +61,9 @@ class ArrayUnorderedListTest {
         assertEquals(17, list.size());
     }
 
+    /**
+     * Tests adding an element after a specific target element.
+     */
     @Test
     void testAddAfter() {
         list.addToRear(1);
@@ -60,6 +83,9 @@ class ArrayUnorderedListTest {
         assertDoesNotThrow(() -> list.addAfter(99, 1));
     }
 
+    /**
+     * Tests removing the first element from the list.
+     */
     @Test
     void testRemoveFirst() {
         list.addToRear(10);
@@ -72,6 +98,9 @@ class ArrayUnorderedListTest {
         assertThrows(NoSuchElementException.class, () -> new ArrayUnorderedList<>().removeFirst());
     }
 
+    /**
+     * Tests removing the last element from the list.
+     */
     @Test
     void testRemoveLast() {
         list.addToRear(10);
@@ -84,6 +113,9 @@ class ArrayUnorderedListTest {
         assertThrows(NoSuchElementException.class, () -> new ArrayUnorderedList<>().removeLast());
     }
 
+    /**
+     * Tests removing a specific element from the list.
+     */
     @Test
     void testRemoveElement() {
         list.addToRear(1);
@@ -100,6 +132,9 @@ class ArrayUnorderedListTest {
         assertTrue(list.isEmpty());
     }
 
+    /**
+     * Tests that appropriate exceptions are thrown for invalid remove operations.
+     */
     @Test
     void testRemoveExceptions() {
         list.addToRear(1);

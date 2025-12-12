@@ -5,8 +5,8 @@ import java.util.Random;
 /**
  * Represents a random event that occurs when traversing a corridor.
  * <p>
- * These events introduce unpredictability to the game by providing opportunities
- * to find items or imposing immediate effects (positive or negative) on the player.
+ * These events introduce unpredictability to the game by imposing immediate effects
+ * (positive or negative) on the player.
  * It fulfills the requirement: "Corridors: paths... where random events may occur."
  * </p>
  *
@@ -15,7 +15,6 @@ import java.util.Random;
  */
 public class RandomEvent {
     private final String description;
-    private final Item item;
     private final Effect directEffect;
     private final Random random = new Random();
 
@@ -23,28 +22,23 @@ public class RandomEvent {
      * Constructs a new RandomEvent.
      *
      * @param description  The text description of the event.
-     * @param item         An item that might be found (can be null).
      * @param directEffect An immediate effect applied to the player (can be null).
      */
-    public RandomEvent(String description, Item item, Effect directEffect) {
+    public RandomEvent(String description, Effect directEffect) {
         this.description = description;
-        this.item = item;
         this.directEffect = directEffect;
     }
 
     /**
      * Triggers the visual aspect of the event.
      * <p>
-     * Displays the description to the user. There is a 50% chance that the item
-     * (if defined) will be revealed/found. The direct effect is always displayed.
+     * Displays the description to the user. The direct effect is always displayed.
      * </p>
+     *
+     * @param player player affected by this event
      */
-    public void trigger() {
-        System.out.println("EVENTO: " + description);
-        // 50% chance to find the item
-        if (random.nextBoolean() && item != null) {
-            System.out.println("Encontraste: " + item);
-        }
+    public void trigger(Player player) {
+        System.out.println("Evento: " + description);
         if (directEffect != null) {
             System.out.println("Efeito: " + directEffect);
         }
@@ -60,11 +54,11 @@ public class RandomEvent {
     }
 
     /**
-     * Retrieves the item associated with this event.
+     * Retrieves the description of this event.
      *
-     * @return The {@link Item} object.
+     * @return textual description of the event
      */
-    public Item getItem() {
-        return item;
+    public String getDescription() {
+        return description;
     }
 }

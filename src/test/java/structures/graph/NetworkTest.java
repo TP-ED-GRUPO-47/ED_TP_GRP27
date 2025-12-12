@@ -1,10 +1,22 @@
 package structures.graph;
 
+import java.util.Iterator;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.util.Iterator;
-import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the {@link Network} class (adjacency matrix implementation).
+ * <p>
+ * Tests weighted graph operations using matrix representation.
+ * </p>
+ *
+ * @author Group 27
+ * @version 2025/2026
+ */
 class NetworkTest {
 
     private Network<String> network;
@@ -14,6 +26,9 @@ class NetworkTest {
         network = new Network<>();
     }
 
+    /**
+     * Tests adding vertices and checking network size.
+     */
     @Test
     void testAddVertexAndSize() {
         assertTrue(network.isEmpty(), "Network deve iniciar vazia");
@@ -26,42 +41,46 @@ class NetworkTest {
         assertEquals(2, network.size());
     }
 
+    /**
+     * Tests adding weighted edges.
+     */
     @Test
     void testAddEdgeWeighted() {
         network.addVertex("A");
         network.addVertex("B");
         network.addVertex("C");
 
-        // Adiciona aresta com peso específico
         network.addEdge("A", "B", 5.5);
 
-        // Adiciona aresta sem peso (default 1.0)
         network.addEdge("B", "C");
 
         Iterator<String> it = network.iteratorBFS("A");
         assertTrue(it.hasNext());
     }
 
+    /**
+     * Tests removing edges from the network.
+     */
     @Test
     void testRemoveEdge() {
         network.addVertex("A");
         network.addVertex("B");
         network.addEdge("A", "B", 10.0);
 
-        // Verifica conectividade antes
         Iterator<String> itBefore = network.iteratorBFS("A");
         assertEquals("A", itBefore.next());
         assertEquals("B", itBefore.next());
 
-        // Remove aresta (define peso como Infinito)
         network.removeEdge("A", "B");
 
-        // Verifica conectividade depois
         Iterator<String> itAfter = network.iteratorBFS("A");
         assertEquals("A", itAfter.next());
         assertFalse(itAfter.hasNext(), "B não deve ser alcançável após remover aresta");
     }
 
+    /**
+     * Tests automatic capacity expansion with many vertices.
+     */
     @Test
     void testExpandCapacity() {
         for (int i = 0; i < 15; i++) {
@@ -79,6 +98,9 @@ class NetworkTest {
         assertTrue(foundV14);
     }
 
+    /**
+     * Tests breadth-first search traversal.
+     */
     @Test
     void testBFS() {
         network.addVertex("A");
@@ -94,6 +116,9 @@ class NetworkTest {
         assertEquals("C", bfs.next());
     }
 
+    /**
+     * Tests BFS with disconnected vertices.
+     */
     @Test
     void testBFSDisconnected() {
         network.addVertex("A");
@@ -103,6 +128,9 @@ class NetworkTest {
         assertFalse(bfs.hasNext());
     }
 
+    /**
+     * Tests depth-first search traversal.
+     */
     @Test
     void testDFS() {
         network.addVertex("A");
@@ -115,9 +143,11 @@ class NetworkTest {
         assertEquals("B", dfs.next());
     }
 
+    /**
+     * Tests shortest path iterator using weights.
+     */
     @Test
     void testShortestPathIterator() {
-        // Teste do iterador (baseado em saltos/BFS)
         network.addVertex("A");
         network.addVertex("B");
         network.addVertex("C");
@@ -130,9 +160,14 @@ class NetworkTest {
 
         assertTrue(path.hasNext());
         assertEquals("A", path.next());
-        assertEquals("C", path.next(), "Deve escolher o caminho direto A->C pois tem menos saltos");
+        assertEquals("B", path.next());
+        assertEquals("C", path.next(), "Deve escolher A->B->C (peso 2) em vez de A->C (peso 100)");
+        assertFalse(path.hasNext());
     }
 
+    /**
+     * Tests shortest path when no path exists.
+     */
     @Test
     void testShortestPathNoPath() {
         network.addVertex("A");
@@ -141,14 +176,11 @@ class NetworkTest {
         assertFalse(path.hasNext());
     }
 
-    // --- CORREÇÃO: Testes Reais do Dijkstra ---
-
+    /**
+     * Tests Dijkstra algorithm calculating shortest path weight.
+     */
     @Test
     void testDijkstraShortestPathWeight() {
-        // Cenário para testar pesos:
-        // A --(1.0)--> B --(2.0)--> C  (Total: 3.0)
-        // A --(10.0)--> C              (Total: 10.0)
-
         network.addVertex("A");
         network.addVertex("B");
         network.addVertex("C");
@@ -157,21 +189,25 @@ class NetworkTest {
         network.addEdge("B", "C", 2.0);
         network.addEdge("A", "C", 10.0);
 
-        // O Dijkstra deve escolher A -> B -> C porque 3.0 < 10.0
         double weight = network.shortestPathWeight("A", "C");
         assertEquals(3.0, weight, 0.001);
     }
 
+    /**
+     * Tests Dijkstra when no path exists between vertices.
+     */
     @Test
     void testDijkstraNoPath() {
         network.addVertex("A");
         network.addVertex("B");
 
-        // Sem conexão, deve retornar Infinito
         double weight = network.shortestPathWeight("A", "B");
         assertEquals(Double.POSITIVE_INFINITY, weight);
     }
 
+    /**
+     * Tests Dijkstra with source and target being the same vertex.
+     */
     @Test
     void testDijkstraSameVertex() {
         network.addVertex("A");
@@ -180,6 +216,9 @@ class NetworkTest {
         assertEquals(0.0, weight);
     }
 
+    /**
+     * Tests behavior with invalid vertex indices.
+     */
     @Test
     void testInvalidIndices() {
         Iterator<String> it = network.iteratorBFS("Z");

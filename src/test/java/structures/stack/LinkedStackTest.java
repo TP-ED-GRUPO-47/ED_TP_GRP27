@@ -1,10 +1,24 @@
 package structures.stack;
 
-import exceptions.EmptyCollectionException;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
+import exceptions.EmptyCollectionException;
+
+/**
+ * Unit tests for the {@link LinkedStack} class.
+ * <p>
+ * Tests stack operations following LIFO (Last In, First Out) principle.
+ * </p>
+ *
+ * @author Group 27
+ * @version 2025/2026
+ */
 class LinkedStackTest {
 
     private LinkedStack<String> stack;
@@ -14,6 +28,9 @@ class LinkedStackTest {
         stack = new LinkedStack<>();
     }
 
+    /**
+     * Tests pushing elements and size tracking.
+     */
     @Test
     void testPushAndSize() {
         assertTrue(stack.isEmpty(), "Stack deve iniciar vazia");
@@ -29,6 +46,9 @@ class LinkedStackTest {
         assertEquals("B", stack.peek());
     }
 
+    /**
+     * Tests popping elements from the stack in LIFO order.
+     */
     @Test
     void testPop() {
         stack.push("A");
@@ -48,6 +68,9 @@ class LinkedStackTest {
         assertEquals(0, stack.size());
     }
 
+    /**
+     * Tests peeking at the top element without removing it.
+     */
     @Test
     void testPeek() {
         stack.push("X");
@@ -59,6 +82,9 @@ class LinkedStackTest {
         assertEquals(2, stack.size());
     }
 
+    /**
+     * Tests the isEmpty functionality of the stack.
+     */
     @Test
     void testIsEmpty() {
         assertTrue(stack.isEmpty());
@@ -68,6 +94,9 @@ class LinkedStackTest {
         assertTrue(stack.isEmpty());
     }
 
+    /**
+     * Tests string representation of the stack.
+     */
     @Test
     void testToString() {
         stack.push("Base");
@@ -78,6 +107,9 @@ class LinkedStackTest {
         assertEquals("Stack (top → bottom): [Topo, Meio, Base]", str);
     }
 
+    /**
+     * Tests that exceptions are thrown for invalid operations on empty stack.
+     */
     @Test
     void testExceptions() {
         assertThrows(EmptyCollectionException.class, () -> {

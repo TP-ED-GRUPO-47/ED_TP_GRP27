@@ -1,18 +1,24 @@
 package model;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import structures.linear.ArrayUnorderedList;
-
 import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
- * Testes avançados para a estratégia do Bot.
- * Usa Reflection e Mocking para forçar comportamentos aleatórios.
+ * Advanced tests for Bot strategy.
+ * <p>
+ * Uses Reflection and Mocking to force random behaviors and test
+ * both smart and random strategies.
+ * </p>
+ *
+ * @author Group 27
+ * @version 2025/2026
  */
 class BotSmartStrategyTest {
 
@@ -24,8 +30,10 @@ class BotSmartStrategyTest {
     private Room treasure;
 
     /**
-     * Classe Mock para controlar o comportamento do Random.
-     * Permite definir o que sai no nextDouble() e no nextInt().
+     * Mock class to control Random behavior.
+     * <p>
+     * Allows defining what comes out of nextDouble() and nextInt().
+     * </p>
      */
     private static class ControlledRandom extends Random {
         private final double doubleVal;
@@ -62,10 +70,9 @@ class BotSmartStrategyTest {
         maze.addRoom(deadEnd);
         maze.addRoom(treasure);
 
-        // Definir conexões
         maze.addCorridor("Start", "Path", 1.0);
         maze.addCorridor("Path", "Treasure", 1.0);
-        maze.addCorridor("Start", "Dead", 1.0); // Opção errada
+        maze.addCorridor("Start", "Dead", 1.0);
 
         bot.setCurrentRoom(start);
 
@@ -78,6 +85,9 @@ class BotSmartStrategyTest {
         field.set(target, value);
     }
 
+    /**
+     * Tests smart bot choosing the optimal path to treasure.
+     */
     @Test
     void testSmartLogicSuccess() throws Exception {
 
@@ -89,6 +99,9 @@ class BotSmartStrategyTest {
         assertEquals("Path", chosenMove, "Bot inteligente focado deve escolher o caminho para o tesouro");
     }
 
+    /**
+     * Tests smart bot being distracted and choosing randomly.
+     */
     @Test
     void testSmartLogicDistracted() throws Exception {
         int deadEndIndex = -1;
@@ -112,6 +125,9 @@ class BotSmartStrategyTest {
         assertEquals("Dead", chosenMove, "Bot distraído deve ignorar o caminho ótimo e escolher aleatoriamente (neste caso forçado para Dead)");
     }
 
+    /**
+     * Tests smart bot behavior when no path exists to the treasure.
+     */
     @Test
     void testSmartLogicNoPath() throws Exception {
 

@@ -2,6 +2,7 @@ package model;
 
 import java.util.Iterator;
 import java.util.Random;
+
 import structures.linear.ArrayUnorderedList;
 
 /**
@@ -21,8 +22,8 @@ import structures.linear.ArrayUnorderedList;
 public class Bot extends Player {
 
     private Random random;
-    private boolean isSmart; // Defines the strategy: true = Pathfinding, false = Random
-    private static final double ERROR_CHANCE = 0.2; // 20% chance for smart bots to make a mistake
+    private boolean isSmart;
+    private static final double ERROR_CHANCE = 0.2;
 
     /**
      * Constructs a new Bot with the specified name.
@@ -40,7 +41,7 @@ public class Bot extends Player {
         this.isSmart = random.nextBoolean();
 
         String strategyName = isSmart ? "INTELIGENTE" : "ALEATÓRIA";
-        System.out.println(">> Bot criado: " + name);
+        System.out.println("\nBot criado: " + name + " (" + strategyName + ")");
     }
 
     /**
@@ -59,7 +60,9 @@ public class Bot extends Player {
      */
     public String decideMove(Maze maze) {
         Room current = getCurrentRoom();
-        if (current == null) return null;
+        if (current == null){
+            return null;
+        } 
 
         if (isSmart) {
             if (random.nextDouble() < ERROR_CHANCE) {

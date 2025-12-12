@@ -1,0 +1,79 @@
+{
+  "nome": "Arena de Treino do Iniciado",
+  "salas": [
+    {
+      "id": "PatioEntrada",
+      "tipo": "ENTRADA",
+      "descricao": "Pátio de Entrada - Onde a jornada de treino se inicia."
+    },
+    {
+      "id": "CorredorLeste",
+      "tipo": "NORMAL",
+      "descricao": "Corredor de acesso Leste. Um caminho rápido mas instável."
+    },
+    {
+      "id": "CorredorOeste",
+      "tipo": "NORMAL",
+      "descricao": "Corredor de acesso Oeste. Um caminho mais seguro, mas longo."
+    },
+    {
+      "id": "SalaAlavancasBasicas",
+      "tipo": "ALAVANCA",
+      "descricao": "Treino de Alavancas Básicas - Um mecanismo de teste simples."
+    },
+    {
+      "id": "DesafioEnigma1",
+      "tipo": "ENIGMA",
+      "descricao": "Desafio de Sabedoria - Um enigma fundamental para progredir."
+    },
+    {
+      "id": "PortaoSaida",
+      "tipo": "TESOURO",
+      "descricao": "Portão de Saída - Fim do Treino Básico! Parabéns pela conclusão."
+    }
+  ],
+  "ligacoes": [
+    {
+      "origem": "PatioEntrada",
+      "destino": "CorredorLeste",
+      "custo": 1.0,
+      "evento": {
+        "descricao": "A pressa faz-te escorregar neste caminho rápido. Perdes o teu momento, o que te faz atrasar uma jogada.",
+        "efeito": "SKIP_TURN"
+      }
+    },
+    {
+      "origem": "PatioEntrada",
+      "destino": "CorredorOeste",
+      "custo": 2.0
+    },
+    {
+      "origem": "CorredorLeste",
+      "destino": "SalaAlavancasBasicas",
+      "custo": 1.0
+    },
+    {
+      "origem": "CorredorOeste",
+      "destino": "SalaAlavancasBasicas",
+      "custo": 1.0,
+      "evento": {
+        "descricao": "Encontras uma Poção de Treino abandonada neste caminho mais longo, recuperando energia.",
+        "efeito": "HEAL"
+      }
+    },
+    {
+      "origem": "SalaAlavancasBasicas",
+      "destino": "DesafioEnigma1",
+      "custo": 2.0
+    },
+    {
+      "origem": "DesafioEnigma1",
+      "destino": "PortaoSaida",
+      "custo": 2.0,
+      "evento": {
+        "descricao": "Um feitiço residual do enigma concede um pequeno impulso de poder para a reta final.",
+        "efeito": "BONUS_POWER"
+      }
+    }
+  ]
+}

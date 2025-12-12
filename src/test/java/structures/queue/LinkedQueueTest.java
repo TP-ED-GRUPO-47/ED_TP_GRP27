@@ -1,9 +1,21 @@
 package structures.queue;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the {@link LinkedQueue} class.
+ * <p>
+ * Tests queue operations following FIFO (First In, First Out) principle.
+ * </p>
+ *
+ * @author Group 27
+ * @version 2025/2026
+ */
 class LinkedQueueTest {
 
     private LinkedQueue<String> queue;
@@ -13,6 +25,9 @@ class LinkedQueueTest {
         queue = new LinkedQueue<>();
     }
 
+    /**
+     * Tests enqueue operation and size tracking.
+     */
     @Test
     void testEnqueueAndSize() {
         assertTrue(queue.isEmpty(), "Fila deve começar vazia");
@@ -28,6 +43,9 @@ class LinkedQueueTest {
         assertEquals("A", queue.first(), "O primeiro elemento deve continuar a ser A (FIFO)");
     }
 
+    /**
+     * Tests dequeue operation with FIFO order.
+     */
     @Test
     void testDequeue() {
         queue.enqueue("A");
@@ -47,6 +65,9 @@ class LinkedQueueTest {
         assertEquals(0, queue.size());
     }
 
+    /**
+     * Tests first operation without removing the element.
+     */
     @Test
     void testFirst() {
         queue.enqueue("X");
@@ -59,6 +80,9 @@ class LinkedQueueTest {
         assertEquals("Y", queue.first());
     }
 
+    /**
+     * Tests isEmpty functionality.
+     */
     @Test
     void testIsEmpty() {
         assertTrue(queue.isEmpty());
@@ -68,6 +92,9 @@ class LinkedQueueTest {
         assertTrue(queue.isEmpty());
     }
 
+    /**
+     * Tests string representation of the queue.
+     */
     @Test
     void testToString() {
         queue.enqueue("1");
@@ -77,6 +104,9 @@ class LinkedQueueTest {
         assertEquals("[1, 2, 3]", queue.toString());
     }
 
+    /**
+     * Tests that appropriate exceptions are thrown for invalid operations.
+     */
     @Test
     void testExceptions() {
         Exception exceptionDequeue = assertThrows(IllegalStateException.class, () -> {
@@ -90,6 +120,9 @@ class LinkedQueueTest {
         assertEquals("Queue is empty", exceptionFirst.getMessage());
     }
 
+    /**
+     * Tests that queue can be cleared by dequeuing all elements.
+     */
     @Test
     void testClearLogicViaDequeue() {
         queue.enqueue("A");

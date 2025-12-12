@@ -1,16 +1,35 @@
 package structures.linear;
 
-
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
+import exceptions.NoSuchElementException;
 
+/**
+ * Doubly-linked list implementation of an unordered list.
+ * <p>
+ * This class implements the {@link UnorderedListADT} interface using a doubly-linked structure
+ * with forward and backward pointers. Each node has references to both the next and previous nodes,
+ * enabling efficient bidirectional traversal.
+ * </p>
+ * <p>
+ * Elements can be added to the front, rear, or after a specific element. Removal operations
+ * include removeFirst, removeLast, and remove by element. The list maintains head and tail
+ * pointers for efficient operations at both ends.
+ * </p>
+ *
+ * @param <T> The type of elements stored in the list.
+ * @author Group 27
+ * @version 2025/2026
+ */
 public class DoubleLinkedUnorderedList<T> implements UnorderedListADT<T> {
 
     private int count;
     private DoubleNode<T> head;
     private DoubleNode<T> tail;
 
+    /**
+     * Creates an empty doubly-linked list.
+     */
     public DoubleLinkedUnorderedList() {
         count = 0;
         head = null;

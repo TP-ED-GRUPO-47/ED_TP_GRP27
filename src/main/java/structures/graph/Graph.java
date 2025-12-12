@@ -1,19 +1,24 @@
 package structures.graph;
 
+import java.util.Iterator;
+
 import structures.linear.ArrayUnorderedList;
 import structures.queue.LinkedQueue;
 import structures.stack.LinkedStack;
 
-import java.util.Iterator;
-
 /**
  * Graph represents an adjacency matrix implementation of a graph.
  *
+ * @param <T> element type stored as vertices
  */
 public class Graph<T> implements GraphADT<T> {
+    /** Initial storage capacity for vertices. */
     protected final int DEFAULT_CAPACITY = 10;
+    /** Current number of vertices present in the graph. */
     protected int numVertices;
+    /** Symmetric adjacency matrix storing edge presence. */
     protected boolean[][] adjMatrix;
+    /** Array holding vertex payloads. */
     protected T[] vertices;
 
     /**
@@ -73,6 +78,12 @@ public class Graph<T> implements GraphADT<T> {
         return iteratorBFS(getIndex(startVertex));
     }
 
+    /**
+     * Returns a breadth first iterator starting with the given vertex index.
+     *
+     * @param startIndex the index of the starting vertex
+     * @return a breadth first iterator beginning at the given vertex
+     */
     public Iterator<T> iteratorBFS(int startIndex) {
         Integer x;
         LinkedQueue<Integer> traversalQueue = new LinkedQueue<Integer>();
@@ -107,6 +118,12 @@ public class Graph<T> implements GraphADT<T> {
         return iteratorDFS(getIndex(startVertex));
     }
 
+    /**
+     * Returns a depth first iterator starting with the given vertex index.
+     *
+     * @param startIndex the index of the starting vertex
+     * @return a depth first iterator starting at the given vertex
+     */
     public Iterator<T> iteratorDFS(int startIndex) {
         Integer x;
         boolean found;
@@ -142,12 +159,22 @@ public class Graph<T> implements GraphADT<T> {
         return resultList.iterator();
     }
 
-
+    /**
+     * Checks if an index is valid for this graph.
+     *
+     * @param index the index to validate
+     * @return true if the index is valid, false otherwise
+     */
     protected boolean indexIsValid(int index) {
         return ((index < numVertices) && (index >= 0));
     }
 
-
+    /**
+     * Returns the index of the specified vertex.
+     *
+     * @param vertex the vertex to find
+     * @return the index of the vertex, or -1 if not found
+     */
     protected int getIndex(T vertex) {
         for (int i = 0; i < numVertices; i++)
             if (vertices[i].equals(vertex))
@@ -155,6 +182,10 @@ public class Graph<T> implements GraphADT<T> {
         return -1;
     }
 
+    /**
+     * Expands the capacity of the graph by doubling the size of the vertex array
+     * and adjacency matrix.
+     */
     protected void expandCapacity() {
         T[] largerVertices = (T[]) (new Object[vertices.length * 2]);
         boolean[][] largerAdjMatrix = new boolean[vertices.length * 2][vertices.length * 2];
@@ -198,6 +229,13 @@ public class Graph<T> implements GraphADT<T> {
     public void removeEdge(T vertex1, T vertex2) {
         removeEdge(getIndex(vertex1), getIndex(vertex2));
     }
+
+    /**
+     * Removes an edge between two vertices of the graph using indices.
+     *
+     * @param index1 the index of the first vertex
+     * @param index2 the index of the second vertex
+     */
     private void removeEdge(int index1, int index2) {
         if (indexIsValid(index1) && indexIsValid(index2)) {
             adjMatrix[index1][index2] = false;
@@ -237,6 +275,14 @@ public class Graph<T> implements GraphADT<T> {
         return iteratorShortestPath(getIndex(startVertex), getIndex(targetVertex));
     }
 
+    /**
+     * Returns an iterator that contains the shortest path between two vertices using indices.
+     * Uses breadth-first search to find the shortest path.
+     *
+     * @param startIndex the index of the starting vertex
+     * @param targetIndex the index of the target vertex
+     * @return an iterator containing the shortest path
+     */
     protected Iterator<T> iteratorShortestPath(int startIndex, int targetIndex) {
         ArrayUnorderedList<T> resultList = new ArrayUnorderedList<T>();
         if (!indexIsValid(startIndex) || !indexIsValid(targetIndex))

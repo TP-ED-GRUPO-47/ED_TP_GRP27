@@ -1,21 +1,24 @@
 import ui.TextUI;
 
 /**
- * Ponto de entrada da aplicação Labirinto da Glória.
+ * Entry point for the Labyrinth of Glory application.
  * <p>
- * Esta classe é responsável apenas por instanciar a interface de utilizador (TextUI)
- * e iniciar o ciclo de vida da aplicação.
+ * This class is responsible only for instantiating the user interface (TextUI)
+ * and starting the application lifecycle.
  * </p>
  *
- * @author Grupo 27
+ * @author Group 27
  * @version 2025/2026
  */
 public class Main {
 
+    /** Hidden constructor to prevent instantiation. */
+    private Main() { }
+
     /**
-     * Método principal que arranca o programa.
+     * Main method that starts the program.
      *
-     * @param args Argumentos da linha de comandos (não utilizados).
+     * @param args Command line arguments (not used).
      */
     public static void main(String[] args) {
         TextUI textUI = new TextUI();

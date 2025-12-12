@@ -1,5 +1,8 @@
 package model;
 
+import java.util.Iterator;
+
+import structures.linear.ArrayUnorderedList;
 import structures.stack.LinkedStack;
 
 /**
@@ -19,6 +22,7 @@ public class Player {
     private Room currentRoom;
     private long power;
     private boolean skipNextTurn;
+    private Room lastSwappedPosition;
 
     /**
      * Movement history used for the final report.
@@ -27,15 +31,34 @@ public class Player {
     private LinkedStack<String> movementHistory;
 
     /**
+     * Tracks riddles solved during the game.
+     */
+    private ArrayUnorderedList<String> solvedRiddles;
+
+    /**
+     * Tracks effects applied to this player.
+     */
+    private ArrayUnorderedList<String> appliedEffects;
+
+    /**
+     * Tracks random events encountered.
+     */
+    private ArrayUnorderedList<String> encounteredEvents;
+
+    /**
      * Constructs a new Player.
      *
      * @param name The name of the player.
      */
     public Player(String name) {
         this.name = name;
-        this.power = 100; // Default starting power
+        this.power = 100; 
         this.movementHistory = new LinkedStack<>();
         this.skipNextTurn = false;
+        this.lastSwappedPosition = null;
+        this.solvedRiddles = new ArrayUnorderedList<>();
+        this.appliedEffects = new ArrayUnorderedList<>();
+        this.encounteredEvents = new ArrayUnorderedList<>();
     }
 
     /**
@@ -74,13 +97,6 @@ public class Player {
     }
 
     /**
-     * Auxiliary method to print the movement history to the console (for debugging).
-     */
-    public void printHistory() {
-        System.out.println("Histórico de " + name + ": " + movementHistory.toString());
-    }
-
-    /**
      * Updates the player's power level.
      * <p>
      * Used when applying effects like damage (negative amount) or healing (positive amount).
@@ -91,9 +107,11 @@ public class Player {
      */
     public void updatePower(int amount) {
         this.power += amount;
-        System.out.println("⚡ " + name + " Power: " + (power - amount) + " -> " + power);
+        System.out.println("Power: " + name + ": " + (power - amount) + " -> " + power);
 
-        if (this.power < 0) this.power = 0;
+        if (this.power < 0){
+            this.power = 0;
+        } 
     }
 
     /**
@@ -124,6 +142,24 @@ public class Player {
     }
 
     /**
+     * Package-private method to silently set room without triggering onEnter.
+     * Used for swaps where we don't want redundant output.
+     */
+    void setCurrentRoomSilent(Room room) {
+        this.currentRoom = room;
+        if (room != null) {
+            this.movementHistory.push(room.getId());
+        }
+    }
+
+    /**
+     * Package-private getter for movement history (for RECEDE implementation).
+     */
+    LinkedStack<String> getMovementHistory() {
+        return movementHistory;
+    }
+
+    /**
      * Returns a string representation of the movement history.
      * Used for generating the final JSON report.
      *
@@ -141,5 +177,88 @@ public class Player {
     @Override
     public String toString() {
         return "Player: " + name + " [Room: " + (currentRoom != null ? currentRoom.getId() : "None") + "]";
+    }
+
+    /**
+     * Records that a riddle was solved.
+     *
+     * @param riddleId The identifier of the solved riddle.
+     */
+    public void recordSolvedRiddle(String riddleId) {
+        solvedRiddles.addToRear(riddleId);
+    }
+
+    /**
+     * Records that an effect was applied to the player.
+     *
+     * @param effectName The name of the effect.
+     */
+    public void recordAppliedEffect(String effectName) {
+        appliedEffects.addToRear(effectName);
+    }
+
+    /**
+     * Records that a random event was encountered.
+     *
+     * @param eventDescription The description of the event.
+     */
+    public void recordEncounteredEvent(String eventDescription) {
+        encounteredEvents.addToRear(eventDescription);
+    }
+
+    /**
+     * Gets the list of solved riddles.
+     *
+     * @return Iterator of riddle IDs.
+     */
+    public Iterator<String> getSolvedRiddles() {
+        return copyIterator(solvedRiddles.iterator());
+    }
+
+    /**
+     * Gets the list of applied effects.
+     *
+     * @return Iterator of effect names.
+     */
+    public Iterator<String> getAppliedEffects() {
+        return copyIterator(appliedEffects.iterator());
+    }
+
+    /**
+     * Gets the list of encountered events.
+     *
+     * @return Iterator of event descriptions.
+     */
+    public Iterator<String> getEncounteredEvents() {
+        return copyIterator(encounteredEvents.iterator());
+    }
+
+    /**
+     * Sets the last room swapped with (for capping recuo effect).
+     *
+     * @param room The room of the player swapped with.
+     */
+    public void setLastSwappedPosition(Room room) {
+        this.lastSwappedPosition = room;
+    }
+
+    /**
+     * Gets the last room swapped with.
+     *
+     * @return The room, or null if no swap occurred.
+     */
+    public Room getLastSwappedPosition() {
+        return lastSwappedPosition;
+    }
+
+    /**
+     * Returns a defensive-iterator backed by a copy, protecting the original collections.
+     */
+    private Iterator<String> copyIterator(Iterator<String> source) {
+        ArrayUnorderedList<String> copy = new ArrayUnorderedList<>();
+        while (source.hasNext()) {
+            copy.addToRear(source.next());
+        }
+        return copy.iterator();
     }
 }

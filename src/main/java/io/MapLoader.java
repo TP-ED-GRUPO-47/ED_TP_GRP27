@@ -81,7 +81,7 @@ public class MapLoader {
                 System.err.println("Campo 'nome' não encontrado no mapa");
                 mapName = "Mapa Desconhecido";
             }
-            System.out.println("✓ A carregar mapa: " + mapName + "!");
+            System.out.println("✓ Carregado Mapa: " + mapName + "!");
 
             JSONArray roomsList = (JSONArray) jsonObject.get("salas");
             if (roomsList == null || roomsList.isEmpty()) {
@@ -111,6 +111,7 @@ public class MapLoader {
                     System.err.println("Erro ao processar sala: " + e.getMessage());
                 }
             }
+            System.out.println("✓ Carregados " + availableRiddles.size() + " enigmas!");
             System.out.println("✓ Carregadas " + roomCount + " salas!");
 
             if (jsonObject.containsKey("ligacoes")) {

@@ -105,7 +105,7 @@ public class ReportExporter {
             file.flush();
             System.out.println("Relatório guardado com sucesso: " + filename + "!");
         } catch (IOException e) {
-            System.err.println("Error saving report: " + e.getMessage());
+            System.err.println("Erro ao guardar relatório: " + e.getMessage());
         }
     }
 
@@ -156,7 +156,7 @@ public class ReportExporter {
             file.flush();
             System.out.println("Relatório global guardado: report_match.json");
         } catch (IOException e) {
-            System.err.println("Error saving match summary: " + e.getMessage());
+            System.err.println("Erro ao guardar sumário da partida: " + e.getMessage());
         }
     }
 }

@@ -263,7 +263,7 @@ public class TurnManager {
      */
     private void printStatus(Player p) {
         Room current = p.getCurrentRoom();
-        System.out.println("Localização: " + current.getId() + " (" + current.getDescription() + ")");
+        System.out.println("\nLocalização: " + current.getId() + " (" + current.getDescription() + ")");
         System.out.println("Poder: " + p.getPower());
         ArrayUnorderedList<Room> unique = new ArrayUnorderedList<>();
         Iterator<Room> it = maze.getNeighbors(current);
@@ -272,7 +272,10 @@ public class TurnManager {
             Room r = it.next();
             if (isRoomIdAbsent(unique, r.getId())) {
                 unique.addToRear(r);
-                sb.append(r.getId()).append(" | ");
+                if (sb.length() > 0) {
+                    sb.append(" | ");
+                }
+                sb.append(r.getId());
             }
         }
         System.out.println("Saídas: [" + sb.toString() + "]");

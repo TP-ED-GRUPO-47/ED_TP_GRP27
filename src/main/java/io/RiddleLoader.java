@@ -119,9 +119,8 @@ public class RiddleLoader {
                     System.err.println("Erro ao processar enigma individual: " + e.getMessage());
                 }
             }
-            System.out.println("✓ Carregados " + riddleCount + " enigmas!");
         } catch (Exception e) {
-            System.err.println("ERRO ao carregar enigmas: " + e.getMessage());
+            System.err.println("Erro ao carregar enigmas: " + e.getMessage());
             throw new InvalidJsonException("Erro ao carregar enigmas de " + fileName + ": " + e.getMessage());
         }
         return riddles;
